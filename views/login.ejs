@@ -7,20 +7,17 @@
 
 <body>
     <div id="app">
+        
+        <h1>로그인</h1>
 
-        <form action="/login" method='post'>
+        <h5>이메일</h5>
+        <input v-model="user.useremail" ref="useremail" type="text">
 
-            <h1>Login</h1>
+        <h5>비밀번호</h5>
+        <input v-model="user.userpw" ref="userpw" type="password">
 
-            <h5>이메일</h5>
-            <input name="useremail" type="text">
-
-            <h5>비밀번호</h5>
-            <input name="userpw" type="password">
-
-            <button>로그인</button>
-
-        </form>
+        <button v-on:click="login">로그인</button>
+   
     </div>
 
 
@@ -28,24 +25,32 @@
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.js"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 
-    <!--뷰로더 스크립트-->
-    <script src="https://unpkg.com/http-vue-loader"></script>
-
     <script>
 
         var app = new Vue({
             el: '#app',
             data: {
-                
-
+                user: {
+                    useremail: '',
+                    userpw: '',
+                }
             },
             methods: {
+                login: function () {     
 
+                    axios.post('/login', this.user)
+                        .then(function (response) {
+                            console.log(response);
+                            //location.href="/login";
+                        }.bind(this))
+                        .catch(function (err) {
+                            console.log(err);
+                        })
+                }
             }
 
 
         });
-
 
     </script>
 </body>

@@ -5,7 +5,6 @@ module.exports = (sequelize, DataTypes) => {
         useremail: {
             type: DataTypes.STRING(100),
             allowNull: false,
-            unique: true,
         },
         userpw: {
             type: DataTypes.STRING(100),
@@ -35,5 +34,12 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING(100),
             allowNull: true
         },
+        createdAt: {
+            type: DataTypes.DATE,
+            allowNull: true
+        },
+        
+    }, {
+        timestamps: false
     });
 }
