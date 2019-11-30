@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>모임 글 리스트</title>
+</head>
+
+<body>
+    <div id="app">
+
+        <h1>모임 글 리스트</h1>
+
+
+    </div>
+
+
+
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+    <script>
+
+        var app = new Vue({
+            el: '#app',
+            data: {
+                meetposts:{}
+            },
+            created: function () {
+                
+            },
+            methods: {
+                moveWrite: function () {
+                    location.href = "http://localhost:3000/meetpost/write"
+                }
+            }
+
+        });
+
+
+    </script>
+
+</body>
+
+</html>

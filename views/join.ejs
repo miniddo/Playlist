@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>회원가입</title>
+</head>
+
+<body>
+    <div id="app">
+        <form>
+
+            <h1>Join</h1>
+
+            <h5>이메일</h5>
+            <input v-model="user.useremail" type="text">
+
+            <h5>비밀번호</h5>
+            <input v-model="user.userpw" type="password">
+
+            <h5>비밀번호 확인</h5>
+            <input type="password">
+
+            <h5>이름</h5>
+            <input name="username" type="text">
+
+            <button v-on:click="join">회원가입</button>
+
+        </form>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+    <script>
+
+        var app = new Vue({
+            el: '#app',
+            data: {
+                user: {
+                    usereamil: '',
+                    userpw: '',
+                }
+            },
+            methods: {
+                join: function () {
+                    axios.post('/join', this.user)
+                        .then(function (response) {
+                            console.log(response.data);
+                            location.href = "/login";
+                        }.bind(this))
+                        .catch(function (err) {
+                            console.log(err);
+                        })
+                }
+            },
+        });
+
+
+    </script>
+
+</body>
+
+</html>
