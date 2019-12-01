@@ -7,6 +7,7 @@ var logger = require('morgan');
 var indexRouter = require('./routes/index');
 var joinRouter = require('./routes/join');
 var loginRouter = require('./routes/login');
+var emailsearchRouter = require('./routes/emailsearch');
 var meetpostRouter = require('./routes/meetpost');
 var categoryRouter = require('./routes/category');
 
@@ -30,6 +31,7 @@ app.use('/join', joinRouter);
 app.use('/login', loginRouter);
 app.use('/meetpost', meetpostRouter);
 app.use('/category', categoryRouter);
+app.use('/emailsearch', emailsearchRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

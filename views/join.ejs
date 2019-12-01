@@ -42,6 +42,16 @@
             <h5>사진(선택)</h5>
             <input v-model="user.photofullroute" ref="photofullroute" type="text">
 
+            <h5>사용자 관심 카테고리</h5>
+            <input v-model="user.usercategory" type="checkbox" value="music" checked>음악
+            <input v-model="user.usercategory" type="checkbox" value="language">언어
+            <input v-model="user.usercategory" type="checkbox" value="cook">요리
+            <input v-model="user.usercategory" type="checkbox" value="youtube">유튜브
+            <input v-model="user.usercategory" type="checkbox" value="IT">IT
+            <input v-model="user.usercategory" type="checkbox" value="exercise">운동
+            
+            <span>체크한 카테고리: {{user.usercategory}}</span> <br><br>
+            
             <button v-on:click="join">회원가입</button>
 
        
@@ -65,6 +75,7 @@
                     phone: '',
                     info: '',
                     photofullroute: '',
+                    usercategory: [],
                 }
             },
             methods: {

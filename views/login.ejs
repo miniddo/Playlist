@@ -17,6 +17,8 @@
         <input v-model="user.userpw" ref="userpw" type="password">
 
         <button v-on:click="login">로그인</button>
+
+        <button v-on:click="emailsearch">이메일 찾기</button>
    
     </div>
 
@@ -41,7 +43,18 @@
                     axios.post('/login', this.user)
                         .then(function (response) {
                             console.log(response);
-                            //location.href="/login";
+                            location.href="/login";
+                        }.bind(this))
+                        .catch(function (err) {
+                            console.log(err);
+                        })
+                },
+                emailsearch: function () {     
+
+                    axios.post('/emailsearch', this.user)
+                        .then(function (response) {
+                            console.log(response);
+                            location.href="/emailsearch";
                         }.bind(this))
                         .catch(function (err) {
                             console.log(err);

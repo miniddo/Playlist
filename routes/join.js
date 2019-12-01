@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var User = require('../models/index.js').User;
+var Usercateogory = require('../models/usercategory').Usercateogory;
 
 
 router.get('/', function(req, res, next) {
