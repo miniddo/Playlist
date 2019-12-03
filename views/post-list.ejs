@@ -3,42 +3,84 @@
 
 <head>
     <title>모임 글 리스트</title>
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    
+
 </head>
 
 <body>
     <div id="app">
-
         <h1>모임 글 리스트</h1>
-
-
+        <table>
+            <thead>
+                <th width="10%">카테고리</th>
+                <th width="20%">제목</th>
+                <th width="10%">작성자</th>
+                <th width="30%">내용</th>
+                <!-- <th width="10%">좋아요</th> -->
+                <th width="10%">작성일시</th>
+                <th width="10%">삭제</th>
+            </thead>
+            <tbody>
+                <tr v-for="p in posts">
+                    <td> {{p.category.categoryname}} </td>
+                    <td> <a v-bind:href="'/meetpost/detailpost?id='+p.id">{{p.title}}</a> </td>
+                    <td> {{p.user.username}} </td>
+                    <td> {{p.content}} </td>
+                    <!-- <td>{{p.good}}<button>좋아요</button></td> -->
+                    <td> {{p.createdAt}} </td>
+                    <td> <button v-on:click="removePost($event)" v-bind:value="p.id">삭제</button> </td>
+                </tr>
+            </tbody>
+        </table>
+        <button v-on:click="moveWrite">글작성</button>
     </div>
-
-
 
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.js"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 
     <script>
+        // $.urlParam = function (name) {
+        //     var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
+        //     if (results == null) {
+        //         return null;
+        //     }
+        //     else {
+        //         return results[1] || 0;
+        //     }
+        // }
 
+        // var id = $.urlParam('id');
         var app = new Vue({
             el: '#app',
             data: {
-                meetposts:{}
+                posts: []
             },
             created: function () {
-                
+                axios.get('/meetpost/list')
+                    .then(function (res) {
+                        this.posts = res.data;
+                        console.log(this.posts);
+                    }.bind(this))
+                    .catch(function (err) {
+                        console.log(err);
+                    })
             },
             methods: {
                 moveWrite: function () {
-                    location.href = "http://localhost:3000/meetpost/write"
+                    location.href = "meetpost/writepage"
+                },
+                // 글 삭제
+                removePost: function (e) {
+                    const buttonValue = e.target.value;
+                    console.log(buttonValue);
+                    axios.delete('/meetpost/delete/'+buttonValue);
+                    location.href="meetpost";
                 }
             }
-
         });
-
-
     </script>
-
 </body>
 
 </html>

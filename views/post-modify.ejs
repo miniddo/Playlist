@@ -2,19 +2,17 @@
 <html>
 
 <head>
-    <title>모임 글 작성</title>
+    <title>모임 글 수정</title>
 </head>
 
 <body>
     <div id="app">
-
-
             <h1>글 작성</h1>
 
             <h5>카테고리</h5>
             <select v-model="post.categoryId" ref="categoryid">
                 <option value="0" selected>카테고리 선택</option>
-                <option v-for="c in category" v-bind:value="c.id">{{c.categoryname}}</option>  <!-- v-bind:value에 서버로 넘겨줄 데이터를 넣어놓자! -->
+                <option v-for="c in category" v-bind:value="c.id">{{c.categoryname}}</option>
             </select>
 
             <h5>제목</h5>
@@ -57,18 +55,7 @@
                     {id:4, age:'40대'},
                     {id:5, age:'50대'}
                 ],
-                post: {
-                    categoryId: '',
-                    title: '',
-                    headcount: '',
-                    age: '',
-                    record: '',
-                    content: '',
-                    participants: 0,
-                    good: 0,
-                    count: 0,
-                    photo: ''
-                }
+                post: { }
 
             },
             created: function () {               
@@ -80,52 +67,60 @@
                     .catch(function (err) {
                         console.log(err);
                     })
-
+                
+                axios.get('/list'+id)
+                .then(function(res){
+                    this.post = res.data;
+                }.bind(this))
+                .catch(function(err) {
+                    console.errer(err);
+                })
             },
             methods: {
                 savePost: function() {
 
-                    if (this.post.categoryId == '') {
-                        alert("카테고리를 선택해주세요");
-                        this.$refs.categoryid.focus();
-                        return false;
-                    }
+                    // if (this.post.categoryId == '') {
+                    //     alert("카테고리를 선택해주세요");
+                    //     this.$refs.categoryid.focus();
+                    //     return false;
+                    // }
 
-                    if (this.post.title == '') {
-                        alert("제목을 입력해주세요");
-                        this.$refs.title.focus();
-                        return false;
-                    }
+                    // if (this.post.title == '') {
+                    //     alert("제목을 입력해주세요");
+                    //     this.$refs.title.focus();
+                    //     return false;
+                    // }
 
-                    if (this.post.headcount == '') {
-                        alert("인원수를 입력해주세요");
-                        this.$refs.headcount.focus();
-                        return false;
-                    }
+                    // if (this.post.headcount == '') {
+                    //     alert("인원수를 입력해주세요");
+                    //     this.$refs.headcount.focus();
+                    //     return false;
+                    // }
 
-                    if (this.post.age == '') {
-                        alert("나이대를 선택해주세요");
-                        this.$refs.age.focus();
-                        return false;
-                    }
+                    // if (this.post.age == '') {
+                    //     alert("나이대를 선택해주세요");
+                    //     this.$refs.age.focus();
+                    //     return false;
+                    // }
 
-                    if (this.post.record == '') {
-                        alert("이력을 입력해주세요");
-                        this.$refs.record.focus();
-                        return false;
-                    }
+                    // if (this.post.record == '') {
+                    //     alert("이력을 입력해주세요");
+                    //     this.$refs.record.focus();
+                    //     return false;
+                    // }
 
-                    if (this.post.content == '') {
-                        alert("내용을 입력해주세요");
-                        this.$refs.content.focus();
-                        return false;
-                    }
+                    // if (this.post.content == '') {
+                    //     alert("내용을 입력해주세요");
+                    //     this.$refs.content.focus();
+                    //     return false;
+                    // }
 
                     axios.post('/meetpost/write', this.post) //post 방식으로 넘김
                     .then(function (res) {
                       
                         console.log(res);
-                        location.href="/meetpost";
+                        //alert("!!!!");
+                        location.href="/meetpost/listpage";
                         
                     }.bind(this))
                     .catch(function(err){
