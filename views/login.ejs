@@ -43,15 +43,19 @@
                 }
             },
             methods: {
-                login: function () {     
-
+                login: function () {
                     axios.post('/login', this.user)
-                        .then(function (response) {
-                            console.log(response);
-                            //location.href="/";
-                        }.bind(this))
-                        .catch(function (err) {
-                            console.log(err);
+                         .then((res) => {
+                            if (res.data.success == true) {
+                                alert(res.data.message);
+                                location.href="/";
+                            }
+                            if (res.data.success == false) {
+                                alert(res.data.message);
+                            }
+                        })
+                        .catch(function (error) {
+                            alert('error')
                         })
                 },
                 cancel: function () {     
@@ -119,6 +123,8 @@
                             console.log('name:' + response.name);
                             console.log('email:' + response.email);
                             console.log('picture:' + response.picture.data.url);
+                            
+                            location.href="/";
                     
                             if (response.email == null) {
                                 alert("이메일 주소 정보가 전달되지 않아 로그인이 불가합니다.");

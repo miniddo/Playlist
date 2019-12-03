@@ -82,24 +82,33 @@
                 double_check: function() {
 
                     axios.post('/join/double_check', this.user)
-                        .then(function (response) {
-                            console.log(response);
-                            //location.href="/login";
-                        }.bind(this))
-                        .catch(function (err) {
-                            console.log(err);
+                         .then((res) => {
+                            if (res.data.success == true) {
+                                alert(res.data.message);
+                            }
+                            if (res.data.success == false) {
+                                alert(res.data.message);
+                            }
+                        })
+                        .catch(err => {
+                            alert(err);
                         })
                     
                 },
                 join: function () {
 
                     axios.post('/join', this.user)
-                        .then(function (response) {
-                            console.log(response);
-                            //location.href="/";
-                        }.bind(this))
-                        .catch(function (err) {
-                            console.log(err);
+                         .then((res) => {
+                            if (res.data.success == true) {
+                                alert(res.data.message);
+                                location.href="/";
+                            }
+                            if (res.data.success == false) {
+                                alert(res.data.message);
+                            }
+                        })
+                        .catch(err => {
+                            alert(err);
                         })
                 }
             },

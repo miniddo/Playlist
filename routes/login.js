@@ -13,11 +13,17 @@ router.post('/', async (req, res, next) => {
   const userpw = req.body.userpw;
 
   if(useremail.length <= 0) {
-      return res.send('이메일을 입력하세요.');
+      res.json({
+        success: false,
+        message: '이메일을 입력하세요'
+    })
   }
 
   if(userpw.length <= 0) {
-      return res.send('비밀번호를 입력하세요.');
+      res.json({
+        success: false,
+        message: '비밀번호를 입력하세요.'
+    })
   }
   
   try {
@@ -29,13 +35,22 @@ router.post('/', async (req, res, next) => {
         const expw = await User.findOne({where: {userpw}});
 
         if(expw) {
-            res.send('로그인 성공!');
+            res.json({
+                success: true,
+                message: '로그인 성공!'
+            })
         } else {
-            res.send('비밀번호가 틀렸습니다.');
+            res.json({
+                success: false,
+                message: '비밀번호가 틀렸습니다.'
+            })
         }
 
     } else {
-        res.send('가입되지 않은 회원입니다.');
+        res.json({
+            success: false,
+            message: '가입되지 않은 회원입니다.'
+        })
     }
  
     } catch(error) {

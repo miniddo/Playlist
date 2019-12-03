@@ -11,38 +11,6 @@ router.get('/', function(req, res, next) {
 
 router.post('/', async (req, res, next) => {
 
-
-  // try {  // create가 실행되는 것에 있어서 에러가 발생하는지 확인
-
-  //   if(req.body.useremail == User.useremail) {
-  //     return res.send('이미 존재하는 이메일입니다.');
-  //   }
-
-  //   User.create({
-  //     userId: req.body.userId,
-  //     useremail: req.body.useremail,
-  //     userpw: req.body.userpw,
-  //     username: req.body.username,
-  //     birth: req.body.birth,
-  //     gender: req.body.gender,
-  //     phone: req.body.phone,
-  //     info: req.body.info,
-  //     photofullroute: req.body.photofullroute,
-  //   })
-  //     .then((result) => {
-  //       console.log("데이터 처리 완료");
-  //       console.log(result);
-  //       res.status(201).json(result);
-  //     })
-  //     .catch((err) => {
-  //       console.log("에러발생");  // create가 실행되면서 에러가 발생하면 이쪽으로
-  //       console.error(err);
-  //       next(err);
-  //     })
-  // } catch (err) {
-  //   console.log(err);  // create 자체가 실행이 안되면 이쪽
-  // }
-
   try {
 
     const useremail = req.body.useremail;
@@ -54,34 +22,49 @@ router.post('/', async (req, res, next) => {
     const phone = req.body.phone;
     const info = req.body.info;
     const photofullroute = req.body.photofullroute;
-    
-
-    // const exemail = await User.findOne({where: {useremail}});
-
-    // if(exemail) {
-    //     res.send('이미 가입된 이메일입니다.');
-    // } else {
+   
 
       if(useremail.length <= 0) {
-        return res.send('이메일을 입력해주세요.');
+        res.json({
+          success: false,
+          message: '이메일을 입력해주세요.'
+      })
       }
       if(userpw.length <= 0) {
-        return res.send('비밀번호를 입력해주세요.');
+        res.json({
+          success: false,
+          message: '비밀번호를 입력해주세요.'
+        })
       }
       if(userpw.length < 7) {
-        return res.send('비밀번호는 7글자 이상 적어주세요.');
+        res.json({
+          success: false,
+          message: '비밀번호는 7글자 이상 적어주세요.'
+        })
       }
       if(userpw != userpwre) {
-        return res.send('비밀번호가 일치하지 않습니다.');
+        res.json({
+          success: false,
+          message: '비밀번호가 일치하지 않습니다.'
+        })
       }
       if(username.length <= 0) {
-        return res.send('이름을 입력해주세요.');
+        res.json({
+          success: false,
+          message: '이름을 입력해주세요.'
+        })
       }
-      if(birth.length == 0 || birth.length < 6 || birth.length >= 7) {
-        return res.send('생년월일을 올바르게 입력해주세요.');
+      if(birth.length != 6) {
+        res.json({
+          success: false,
+          message: '생년월일을 올바르게 입력해주세요.'
+        })
       }
-      if(phone.length == 0 || phone.length < 11 || phone.length >= 12) {
-        return res.send('전화번호를 올바르게 입력해주세요.');
+      if(phone.length != 11) {
+        res.json({
+          success: false,
+          message: '전화번호를 올바르게 입력해주세요.'
+        })
       }
         
         await User.create({
@@ -95,7 +78,10 @@ router.post('/', async (req, res, next) => {
           photofullroute: photofullroute,
         })
         .then((result) => {
-            res.status(201).json(result);
+          res.json({
+            success: true,
+            message: '회원가입 성공!'
+          })
         })
         .catch((err) => {
             next(err);
@@ -116,9 +102,15 @@ router.post('/double_check', async (req, res, next) => {
   const exemail = await User.findOne({where: {useremail}});
 
     if(exemail) {
-        return res.send('이미 가입된 이메일입니다.');
+      res.json({
+        success: false,
+        message: '이미 가입된 이메일입니다.'
+      })
     } else {
-        return res.send('사용 가능한 이메일입니다.');
+      res.json({
+        success: true,
+        message: '사용 가능한 이메일입니다.'
+      })
     }
     
 });
