@@ -27,7 +27,6 @@ router.post('/write', function (req, res, next) {
     })
       .then((result) => {
         console.log("데이터 처리 완료");
-        console.log(result);
         res.status(201).json(result);
       })
       .catch((err) => {
@@ -56,26 +55,30 @@ router.get('/list', function (req, res, next) {
 });
 
 // 상세글 페이지 렌더링
- router.get('/detailpost:id', function(req, res, next) {
-   res.render('detailpost'); 
- });
-
- // 전체글 가져오는 라우터
- router.get('/detail', function (req, res, next) {
-  MeetPost.findAll({
-    include: [{ model: Category, }, { model: User}]
-  })
-  .then((posts) => {
-    res.json(posts);
-  }).catch((err) => {
-    console.error(err);
-    next(err);
-  });
+router.get('/:id', function(req, res, next) {
+  res.render('detailpost'); 
 });
 
+// 상세글 가져오는 라우터
+router.get('/detail/:id', function (req, res, next) {
+ MeetPost.findOne({
+   include: [{ model: Category, }, { model: User}],
+   where: { id: req.params.id } 
+ })
+ .then((posts) => {
+   res.json(posts);
+ }).catch((err) => {
+   console.error(err);
+   next(err);
+ });
+});
+
+// router.get('/:id', function(req, res, next) {
+//   res.render('post-modify'); 
+// });
 
 // 글 수정
-router.patch('/:id', function(req, res, next) {
+router.patch('/modify/:id', function(req, res, next) {
   MeetPost.update(
     { 
       
