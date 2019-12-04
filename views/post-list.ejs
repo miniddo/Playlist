@@ -26,7 +26,7 @@
                 <tr v-for="p in posts">
                     <td> {{p.category.categoryname}} </td>
                     <td> <a v-bind:href="'/meetpost/detailpost?id='+p.id">{{p.title}}</a> </td>
-                    <td> {{p.user.username}} </td>
+                    <td> {{p.user.useremail}} </td>
                     <td> {{p.content}} </td>
                     <!-- <td>{{p.good}}<button>좋아요</button></td> -->
                     <td> {{p.createdAt}} </td>
