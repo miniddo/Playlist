@@ -11,6 +11,8 @@ var emailsearchRouter = require('./routes/emailsearch');
 var meetpostRouter = require('./routes/meetpost');
 var categoryRouter = require('./routes/category');
 
+var favoriteRouter = require('./routes/favorite');
+
 var sequelize = require('./models').sequelize;
 
 var app = express();
@@ -32,6 +34,8 @@ app.use('/login', loginRouter);
 app.use('/meetpost', meetpostRouter);
 app.use('/category', categoryRouter);
 app.use('/emailsearch', emailsearchRouter);
+
+app.use('/favorite', favoriteRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
