@@ -4,12 +4,12 @@ var User = require('../models/index.js').User;
 var Usercateogory = require('../models/usercategory').Usercateogory;
 
 
-router.get('/', function(req, res, next) {
+router.get('/join', function(req, res, next) {
     res.render('join');
 });
     
 
-router.post('/', async (req, res, next) => {
+router.post('/join', async (req, res, next) => {
 
     try {
 
@@ -79,6 +79,54 @@ router.post('/double_check', async (req, res, next) => {
     }
     
 });
+
+
+router.get('/login', function(req, res, next) {
+    res.render('login');
+});
+
+router.post('/login', async (req, res, next) => {
+
+    const useremail = req.body.useremail;
+    const userpw = req.body.userpw;
+    
+    try {
+  
+      const exemail = await User.findOne({where: {useremail}});
+  
+      if(exemail) {
+  
+          const expw = await User.findOne({where: {userpw}});
+  
+          if(expw) {
+              res.json({
+                  success: true,
+                  message: '로그인 성공!'
+              })
+          } else {
+              res.json({
+                  success: false,
+                  message: '비밀번호가 틀렸습니다.'
+              })
+          }
+  
+      } else {
+          res.json({
+              success: false,
+              message: '가입되지 않은 회원입니다.'
+          })
+      }
+   
+      } catch(error) {
+        console.error(error);
+        return next(error);
+      }
+  
+}); 
+
+
+
+
   
   
  module.exports = router;

@@ -79,7 +79,7 @@
             methods: {
                 double_check: function() {
 
-                    axios.post('/join/double_check', this.user)
+                    axios.post('/user/double_check', this.user)
                          .then((res) => {
                             if (res.data.success == true) {
                                 alert(res.data.message);
@@ -143,7 +143,7 @@
                         return false;
                     }
 
-                    if(this.$refs.phone.value != 11){
+                    if(this.$refs.phone.value.length != 11){
                         alert("전화번호를 올바르게 입력해주세요.");
                         this.$refs.phone.focus();
                         return false;
@@ -151,11 +151,11 @@
 
 
 
-                    axios.post('/join', this.user)
+                    axios.post('/user/join', this.user)
                          .then((res) => {
                             if (res.data.success == true) {
                                 alert(res.data.message);
-                                location.href="/login";
+                                location.href="/user/login";
                             }
                             if (res.data.success == false) {
                                 alert(res.data.message);

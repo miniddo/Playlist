@@ -44,7 +44,20 @@
             },
             methods: {
                 login: function () {
-                    axios.post('/login', this.user)
+
+                    if(this.$refs.useremail.value == ""){
+                        alert("이메일을 입력해주세요.");
+                        this.$refs.useremail.focus();
+                        return false;
+                    }
+
+                    if(this.$refs.userpw.value == ""){
+                        alert("비밀번호를 입력해주세요.");
+                        this.$refs.userpw.focus();
+                        return false;
+                    }
+
+                    axios.post('/user/login', this.user)
                          .then((res) => {
                             if (res.data.success == true) {
                                 alert(res.data.message);
