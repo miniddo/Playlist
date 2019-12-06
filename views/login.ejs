@@ -21,7 +21,7 @@
          <!-- 페이스북 로그인 구현 -->
         <button type="button" onclick="checkLoginState();" class="btn btn-info block full-width m-b">Facebook Login</button>
         <br><br>
-        
+
         <button v-on:click="cancel">취소</button>
         <button v-on:click="emailsearch">이메일 찾기</button>
    
@@ -43,6 +43,7 @@
                 }
             },
             methods: {
+
                 login: function () {
 
                     if(this.$refs.useremail.value == ""){
@@ -59,6 +60,7 @@
 
                     axios.post('/user/login', this.user)
                          .then((res) => {
+
                             if (res.data.success == true) {
                                 alert(res.data.message);
                                 location.href="/";

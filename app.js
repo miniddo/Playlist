@@ -4,6 +4,9 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
+//dotenv 팩키지 구성
+require('dotenv').config();
+
 var indexRouter = require('./routes/index');
 var userRouter = require('./routes/user');
 var emailsearchRouter = require('./routes/emailsearch');
