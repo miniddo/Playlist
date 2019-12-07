@@ -20,7 +20,7 @@
 
             <button type="submit">로그인</button>
             <!-- <button v-on:click="login">로그인</button> -->
-            <button type="button" v-on:click="authTest">인증 테스트</button>
+            <button type="button" v-on:click="authTest">개인정보조회</button>
 
             <!-- 페이스북 로그인 구현 -->
             <button type="button" onclick="checkLoginState();" class="btn btn-info block full-width m-b">Facebook Login</button>
@@ -81,7 +81,7 @@
                     //         alert('error')
                     //     })
 
-                    axios.post('/user/tlogin', this.user)
+                    axios.post('/user/login', this.user)
                     .then((response) => {
                         
                         //토큰값 확인
@@ -110,6 +110,7 @@
 
                     axios.get('/user/profile',{ headers:{ authorization:token }}).then(function(response){
                         console.log(response.data);
+                        //alert(response.data); //aler 창으로 띄우고 싶은데 잘 안됨 ㅠㅠ
                         this.articles = response.data;
                     }.bind(this))
                     .catch(function(err){

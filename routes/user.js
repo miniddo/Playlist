@@ -12,11 +12,13 @@ var Usercateogory = require('../models/usercategory').Usercateogory;
 
 var router = express.Router();
 
-//회원가입
+//회원가입(화면)
 router.get('/join', function(req, res, next) {
     res.render('join');
 });
-    
+
+//회원가입(데이터)
+//localhost:3000/user/join
 router.post('/join', async (req, res, next) => {
 
     try {
@@ -92,54 +94,15 @@ router.post('/double_check', async (req, res, next) => {
     
 });
 
-//로그인
-router.get('/tlogin', function(req, res, next) {
+//로그인(화면)
+router.get('/login', function(req, res, next) {
     res.render('login');
 });
 
-// router.post('/login', async (req, res, next) => {
 
-//     const useremail = req.body.useremail;
-    
-//     try {
-  
-//       const exemail = await User.findOne({where: {useremail}});
-  
-//       if(exemail) {
-  
-//           //const expw = await User.findOne({where: {userpw}});
-//           const result = await bcrypt.compare(req.body.userpw, exemail.userpw);
-  
-//           if(result) {
-//               res.json({
-//                   success: true,
-//                   message: '로그인 성공!'
-//               })
-//           } else {
-//               res.json({
-//                   success: false,
-//                   message: '비밀번호가 틀렸습니다.'
-//               })
-//           }
-  
-//       } else {
-//           res.json({
-//               success: false,
-//               message: '사용자 정보가 존재하지 않습니다.' 
-//           })
-//       }
-   
-//       } catch(error) {
-//         console.error(error);
-//         return next(error);
-//       }
-  
-// });
-
-
-//토큰 기반 로그인 처리 
-//브라우저에서 post방식으로 http://localhost:3000/user/tlogin 호출시 작동
-router.post('/tlogin', async (req, res, next) => {
+//로그인(데이터) - 토큰 기반
+//localhost:3000/user/login
+router.post('/login', async (req, res, next) => {
 
   try
   {
@@ -200,12 +163,7 @@ router.post('/tlogin', async (req, res, next) => {
 });
 
 
-//테스트용 api
-router.get('/test', verifyToken, (req, res) => {
-  res.json(req.decoded);
-});
-
-//내개인정보조회 : api가 호출될때 등록된 미들웨어(verifyToken)를 먼저 실행하고 프로세스를 진행한다.
+//내개인정보조회
 router.get('/profile',verifyToken,async (req, res) => {
   try
   {
