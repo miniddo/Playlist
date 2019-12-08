@@ -3,6 +3,7 @@ var router = express.Router();
 var MeetPost = require('../models/index.js').MeetPost;
 var Category = require('../models/index.js').Category;
 var User = require('../models/index.js').User;
+var Comment = require('../models/index.js').Comment;
 
 // 글 작성 페이지 렌더링
 router.get('/writepage', function (req, res, next) {
@@ -104,6 +105,26 @@ router.delete('/delete/:id', function(req, res, next) {
       console.error(err);
       next(err);
     });
+});
+
+//댓글 등록
+router.post('/comment/:id', function(req, res, next) {
+
+    Comment.create({
+      comment: req.body.comment,
+      where: {
+        id: req.params.id
+      }
+    })
+      .then((result) => {
+        res.json(result);
+      })
+      .catch((err) => {
+        console.error(err);
+        next(err);
+      });
+
+
 });
 
 module.exports = router;

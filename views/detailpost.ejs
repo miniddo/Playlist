@@ -166,69 +166,8 @@
 
                             <h4 class="title">Recent Comments</h4>
                             <ul class="comments">
-
-                                <!-- <li>
-                                    <div class="media">
-                                        <div class="media-left">
-                                            <div class="image">
-                                                <img src="/images/author-image-01.jpg">
-                                            </div>
-                                        </div>
-                                        <div class="media-body">
-                                            <h4 class="author">John Doe</h4>
-                                            <span class="date">28 March 2016</span>
-                                            <p class="text">
-                                                It is a long established fact that a reader will be distracted by the
-                                                readable
-                                                content of a page when looking at its layout. The point of using Lorem
-                                                Ipsum is
-                                                that it has a more-or-less normal distribution of letters, as opposed to
-                                                using
-                                                'Content here, content here', making it look like readable English.
-                                            </p>
-                                            <div class="comments-bottom text-right">
-                                                <a href="#" class="strong"><i class="icon fa fa-fw fa-commenting-o"></i>
-                                                    REPLY TO THIS COMMENT</a>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <ul class="comments">
-
-                                        <li>
-                                            <div class="media">
-                                                <div class="media-left">
-                                                    <div class="image">
-                                                        <img src="/images/author-image-01.jpg">
-                                                    </div>
-                                                </div>
-                                                <div class="media-body">
-                                                    <h4 class="author">John Doe</h4>
-                                                    <span class="date">28 March 2016</span>
-                                                    <p class="text">
-                                                        It is a long established fact that a reader will be distracted
-                                                        by the readable
-                                                        content of a page when looking at its layout. The point of using
-                                                        Lorem Ipsum is
-                                                        that it has a more-or-less normal distribution of letters, as
-                                                        opposed to using
-                                                        'Content here, content here', making it look like readable
-                                                        English. Many desktop
-                                                        publishing.
-                                                    </p>
-                                                    <div class="comments-bottom text-right">
-                                                        <a href="#" class="strong"><i
-                                                                class="icon fa fa-fw fa-commenting-o"></i> REPLY TO THIS
-                                                            COMMENT</a>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                        </li>
-
-                                    </ul>
-                                </li> -->
-
+                                
+                                <!-- 댓글 달리는 부분 (아직 구현 x) -->
                                 <li>
                                     <div class="media">
                                         <div class="media-left">
@@ -260,36 +199,22 @@
 
                                 <h3><i class="icon fa fa-fw fa-comment-o"></i> Send Your Comment</h3>
 
-                                <form method="post">
-
                                     <input type="hidden" name="form" value="Contact">
 
-                                    <!-- <div class="row">
-                                        <div class="form-group col-md-6">
-                                            <input type="text" name="name" class="form-control"
-                                                placeholder="Your Name... *" required>
-                                        </div>
-                                        <div class="form-group col-md-6">
-                                            <input type="email" name="email" class="form-control"
-                                                placeholder="E-mail address... *" required>
-                                        </div>
-                                    </div> -->
-
                                     <div class="row">
                                         <div class="form-group col-md-12">
-                                            <textarea name="message" class="form-control"
-                                                placeholder="Message... "></textarea>
+                                            <textarea v-model="reply.comment" class="form-control" placeholder="Comment... "></textarea>
                                         </div>
                                     </div>
 
                                     <div class="row">
                                         <div class="form-group col-md-12">
-                                            <button type="submit" class="btn btn-theme"><i class="fa fa-plus"></i> Add
-                                                Comment</button>
+                                            <button v-on:click="saveComment($event)" v-bind:value="posts.id" class="btn btn-theme">
+                                                <i class="fa fa-plus"></i> Add Comment</button>
                                         </div>
                                     </div>
 
-                                </form>
+                                
 
                             </div>
 
@@ -364,6 +289,9 @@
                 posts: [],
                 category: []
             },
+            reply: {
+                comment: ''
+            },
             created: function () {
                 axios.get('/category')
                     .then(function (res) {
@@ -387,6 +315,22 @@
                     alert(buttonValue);
                     axios.delete('/meetpost/delete/' + buttonValue);
                     location.href = "/meetpost";
+                },
+                
+                saveComment: function() {
+                    const cbuttonValue = e.target.value;
+                    axios.post('/meetpost/comment/' + cbuttonValue, this.reply) //post 방식으로 넘김
+                        .then(function (res) {
+
+                            console.log(res);
+                            //location.href = "/meetpost";
+
+                        }.bind(this))
+                        .catch(function (err) {
+
+                            console.log(err)
+                        });
+
                 }
             }
         });
