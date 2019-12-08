@@ -64,7 +64,6 @@
                         <div class="title"><a href="http://localhost:3000/meetpost">Categories</a></div>
                         <ul class="sidebar-menu">
                             <li v-for="c in category"><a href="#">{{c.categoryname}}</a></li>
-                            <!-- <li v-for="c in category" v-bind:value="c.id" v-on:click="search(c.id)"><a>{{c.categoryname}}</a></li> -->
                         </ul>
 
                     </div>
@@ -131,25 +130,8 @@
                             <!-- Additional -->
                             <div class="row information">
 
-                                <!-- 태그 -->
-                                <!-- <div class="col-sm-6">
-                                    <div class="tags">
-                                        <a class="tag" href="#">web</a>
-                                        <a class="tag" href="#">clean</a>
-                                        <a class="tag" href="#">gallery</a>
-                                    </div>
-                                </div> -->
-
                                 <div class="form-group col-md-12">
                                     <ul class="list-inline social-inline">
-                                        <!-- <li><a href="#" class="fa fa-fw fa-facebook"></a></li>
-                                        <li><a href="#" class="fa fa-fw fa-twitter"></a></li> -->
-                                        <!-- <div class="col-xs-12 col-md-6 col-lg-3 mb">
-                                            <a href="#" class="btn btn-block btn-red btn-rounded btn-o-light-bg">좋아요</a>
-                                        </div>
-                                        <div class="col-xs-12 col-md-6 col-lg-3 mb">
-                                            <a href="#" class="btn btn-block btn-red btn-rounded btn-o-light-bg">즐겨찾기</a>
-                                        </div> -->
                                         <button class="btn btn-theme" v-on:click="removePost($event)" v-bind:value="posts.id">삭제</button>
                                         <a v-bind:href="'/meetpost/modify?postid='+posts.id"><button class="btn btn-theme">수정</button></a>
                                     </ul>
@@ -163,11 +145,11 @@
 
                         <!-- Comments -->
                         <div class="widget">
-
+                            
+                            <!-- Comment   -->
                             <h4 class="title">Recent Comments</h4>
                             <ul class="comments">
-                                
-                                <!-- 댓글 달리는 부분 (아직 구현 x) -->
+
                                 <li>
                                     <div class="media">
                                         <div class="media-left">
@@ -183,17 +165,18 @@
                                                 readable
                                                 content of a page when looking at its layout. The point of using Lorem
                                                 Ipsum is
-                                                that it has a more-or-less normal distribution of letters.
+                                                that it has a more-or-less normal distribution of letters, as opposed to
+                                                using
+                                                'Content here, content here', making it look like readable English.
                                             </p>
                                             <div class="comments-bottom text-right">
-                                                <a href="#" class="strong"><i class="icon fa fa-fw fa-commenting-o"></i>
-                                                    REPLY TO THIS COMMENT</a>
+                                                <a href="#" class="strong"><i class="icon fa fa-fw fa-search"></i>
+                                                    SHOW AUTHOR INFORMATION</a>
                                             </div>
                                         </div>
                                     </div>
-                                </li>
 
-                            </ul>
+                                </li>
 
                             <div class="send-comment mt">
 
@@ -213,9 +196,6 @@
                                                 <i class="fa fa-plus"></i> Add Comment</button>
                                         </div>
                                     </div>
-
-                                
-
                             </div>
 
                         </div>
@@ -319,11 +299,11 @@
                 
                 saveComment: function(e) {
                     const cbuttonValue = e.target.value;
-                    axios.post('/meetpost/comment/' + cbuttonValue, this.reply) //post 방식으로 넘김
+                    axios.post('/meetpost/comment/' + cbuttonValue, this.reply)
                         .then(function (res) {
 
                             console.log(res);
-                            //location.href = "/meetpost";
+                            location.href = "/meetpost/detailpost?id=" + cbuttonValue;
 
                         }.bind(this))
                         .catch(function (err) {

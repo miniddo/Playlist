@@ -109,11 +109,13 @@ router.delete('/delete/:id', function(req, res, next) {
 });
 
 //댓글 등록
-router.post('/comment/:id', function(req, res, next) {
+router.post('/comment/:meetpostId', function(req, res, next) {
+
+    var meetpostId = req.params.meetpostId;
 
     Comment.create({
+      meetpostId: meetpostId,
       comment: req.body.comment,
-      include: [{ model: MeetPost }, { model: User}],
       where: { id: req.params.id }
     })
       .then((result) => {
@@ -125,6 +127,25 @@ router.post('/comment/:id', function(req, res, next) {
       });
 
 
+});
+
+// 댓글 페이지 렌더링
+router.get('/commentpage', function(req, res, next) {
+  res.render('common/comment');
+});
+
+// 댓글 가져오는 라우터
+router.get('/comment', function (req, res, next) {
+
+    Comment.findAll({
+      include: [{ model: Meetpost }]
+    })
+    .then((replys) => {
+      res.json(replys);
+    }).catch((err) => {
+      console.error(err);
+      next(err);
+    });
 });
 
 module.exports = router;
