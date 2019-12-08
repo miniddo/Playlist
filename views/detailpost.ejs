@@ -61,9 +61,10 @@
                     <!-- Widget: Categories -->
                     <div class="widget">
 
-                        <div class="title">Categories</div>
+                        <div class="title"><a href="http://localhost:3000/meetpost">Categories</a></div>
                         <ul class="sidebar-menu">
                             <li v-for="c in category"><a href="#">{{c.categoryname}}</a></li>
+                            <!-- <li v-for="c in category" v-bind:value="c.id" v-on:click="search(c.id)"><a>{{c.categoryname}}</a></li> -->
                         </ul>
 
                     </div>
@@ -109,13 +110,8 @@
                                             href="#">Illustration</a></li>   태그-->
                                     <!-- <li><i class="icon fa fa-comments"></i> <a href="#">12 Comments</a></li>   댓글수-->
                                 </ul>
-                                <div class="col-xs-12 col-md-6 col-lg-3 mb">
-                                    <a href="#" class="btn btn-block btn-red btn-rounded btn-o-light-bg">좋아요</a>
-                                </div>
-                                <div class="col-xs-12 col-md-6 col-lg-3 mb">
-                                    <a href="#" class="btn btn-block btn-red btn-rounded btn-o-light-bg">즐겨찾기</a>
-                                </div>
                                 <!-- /Post Metadata -->
+
 
                                 <!-- Post Content -->
                                 <div class="content">
@@ -144,10 +140,18 @@
                                     </div>
                                 </div> -->
 
-                                <div class="col-sm-6">
+                                <div class="form-group col-md-12">
                                     <ul class="list-inline social-inline">
-                                        <li><a href="#" class="fa fa-fw fa-facebook"></a></li>
-                                        <li><a href="#" class="fa fa-fw fa-twitter"></a></li>
+                                        <!-- <li><a href="#" class="fa fa-fw fa-facebook"></a></li>
+                                        <li><a href="#" class="fa fa-fw fa-twitter"></a></li> -->
+                                        <!-- <div class="col-xs-12 col-md-6 col-lg-3 mb">
+                                            <a href="#" class="btn btn-block btn-red btn-rounded btn-o-light-bg">좋아요</a>
+                                        </div>
+                                        <div class="col-xs-12 col-md-6 col-lg-3 mb">
+                                            <a href="#" class="btn btn-block btn-red btn-rounded btn-o-light-bg">즐겨찾기</a>
+                                        </div> -->
+                                        <button class="btn btn-theme" v-on:click="removePost($event)" v-bind:value="posts.id">삭제</button>
+                                        <a v-bind:href="'/meetpost/modify?postid='+posts.id"><button class="btn btn-theme">수정</button></a>
                                     </ul>
                                 </div>
 
@@ -163,7 +167,7 @@
                             <h4 class="title">Recent Comments</h4>
                             <ul class="comments">
 
-                                <li>
+                                <!-- <li>
                                     <div class="media">
                                         <div class="media-left">
                                             <div class="image">
@@ -223,7 +227,7 @@
                                         </li>
 
                                     </ul>
-                                </li>
+                                </li> -->
 
                                 <li>
                                     <div class="media">
@@ -252,9 +256,6 @@
 
                             </ul>
 
-                            <button class="btn btn-theme" v-on:click="removePost($event)" v-bind:value="posts.id">삭제</button>
-                            <a v-bind:href="'/meetpost/modify?postid='+posts.id"><button class="btn btn-theme">수정</button></a>
-
                             <div class="send-comment mt">
 
                                 <h3><i class="icon fa fa-fw fa-comment-o"></i> Send Your Comment</h3>
@@ -263,7 +264,7 @@
 
                                     <input type="hidden" name="form" value="Contact">
 
-                                    <div class="row">
+                                    <!-- <div class="row">
                                         <div class="form-group col-md-6">
                                             <input type="text" name="name" class="form-control"
                                                 placeholder="Your Name... *" required>
@@ -272,7 +273,7 @@
                                             <input type="email" name="email" class="form-control"
                                                 placeholder="E-mail address... *" required>
                                         </div>
-                                    </div>
+                                    </div> -->
 
                                     <div class="row">
                                         <div class="form-group col-md-12">
