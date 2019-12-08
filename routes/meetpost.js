@@ -44,6 +44,7 @@ router.get('/', function(req, res, next) {
 
 // 전체글 가져오는 라우터
 router.get('/list', function (req, res, next) {
+
     MeetPost.findAll({
       include: [{ model: Category, }, { model: User}]
     })
@@ -112,9 +113,8 @@ router.post('/comment/:id', function(req, res, next) {
 
     Comment.create({
       comment: req.body.comment,
-      where: {
-        id: req.params.id
-      }
+      include: [{ model: MeetPost }, { model: User}],
+      where: { id: req.params.id }
     })
       .then((result) => {
         res.json(result);

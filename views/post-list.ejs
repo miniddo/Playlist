@@ -105,23 +105,32 @@
                         </div>
                     </div>
 
-
                     <!-- Pagination -->
-                    <div class="col-md-12 text-right">
-                        <button v-on:click="moveWrite" class="btn btn-theme">글작성</button>
+                    <div class="col-md-12 text-center">
                         <ul class="pagination">
-                            <li><span>Page 1 of 5</span></li>
                             <li><a href="#">&laquo;</a></li>
-                            <li class="active"><a href="#">1</a></li>
-                            <li><a href="#">2</a></li>
-                            <li><a href="#">3</a></li>
-                            <li><a href="#">4</a></li>
-                            <li><a href="#">5</a></li>
-                            <li><a href="#">Next</a></li>
+                            <!-- <li><button disabled="pageNum === 0" type="button" onclick="prePage()">이전</button></li> -->
+                            <li><span>Page 1 of 5</span></li>
+                            <!-- <li><span class="page-count">{{ pageNum + 1 }} / {{ pageCount }} 페이지</span></li> -->
                             <li><a href="#">&raquo;</a></li>
+                            <!-- <li><button disabled="pageNum >= pageCount - 1" type="button" onclick="nextPage()">다음</button></li> -->
                         </ul>
                     </div>
                     <!-- /Pagination -->
+
+                    <!-- Pagination -->
+                    <!-- <div class="col-md-12 text-center">
+                        <ul class="pagination">
+                           
+                        </ul>
+                    </div> -->
+                    <!-- /Pagination -->
+
+                    
+
+                    <div class="col-md-12 text-center">
+                        <button v-on:click="moveWrite" class="btn btn-theme">글작성</button>
+                    </div>        
 
                 </div>
                 <!-- /Blog Content -->
@@ -177,7 +186,7 @@
             el: '#app',
             data: {
                 posts: [],
-                category: []
+                category: [],
             },
             created: function () {
                 axios.get('/category')
@@ -208,7 +217,8 @@
                     .catch(function(err) {
                         console.log(err);
                     });
-                }
+                },
+
             }
         });
 

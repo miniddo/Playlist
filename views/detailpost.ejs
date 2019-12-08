@@ -287,10 +287,10 @@
             el: '#app',
             data: {
                 posts: [],
-                category: []
-            },
-            reply: {
-                comment: ''
+                category: [],
+                reply: {
+                    comment: ''
+                }
             },
             created: function () {
                 axios.get('/category')
@@ -317,7 +317,7 @@
                     location.href = "/meetpost";
                 },
                 
-                saveComment: function() {
+                saveComment: function(e) {
                     const cbuttonValue = e.target.value;
                     axios.post('/meetpost/comment/' + cbuttonValue, this.reply) //post 방식으로 넘김
                         .then(function (res) {
