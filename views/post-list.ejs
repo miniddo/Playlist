@@ -61,7 +61,7 @@
                     <!-- Widget: Categories -->
                     <div class="widget">
 
-                        <div class="title">Categories</div>
+                        <div class="title"><a href="http://localhost:3000/meetpost">Categories</a></div>
                         <ul class="sidebar-menu"> <!--id="categorylist"-->
                             <li v-for="c in category" v-bind:value="c.id" v-on:click="search(c.id)"><a>{{c.categoryname}}</a></li>
                         </ul>
