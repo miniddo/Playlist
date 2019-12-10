@@ -105,6 +105,8 @@
                                 <ul class="list-inline meta">
                                     <li><i class="icon fa fa-calendar"></i> {{posts.createdAt}}</li>
                                     <li><i class="icon fa fa-user"></i> by <a href="#">{{posts.user.username}}</a></li>
+                                    <li><button class="btn btn-theme">쪽지 보내기</button></li>
+                                    <li><button class="btn btn-theme">참여하기</button></a></li>
                                     <!-- <li><i class="icon fa fa-tags"></i> <a href="#">Photography</a>, <a
                                             href="#">Illustration</a></li>   태그-->
                                     <!-- <li><i class="icon fa fa-comments"></i> <a href="#">12 Comments</a></li>   댓글수-->
@@ -115,7 +117,12 @@
                                 <!-- Post Content -->
                                 <div class="content">
                                     <blockquote>
-                                        {{posts.record}}
+                                        <b>인원</b> {{posts.headcount}} <b>명</b> <br>
+                                        <b>나이</b> {{posts.age}} <br>
+                                    </blockquote>
+
+                                    <blockquote>
+                                        이력: {{posts.record}}
                                     </blockquote>
 
                                     <p>
@@ -292,7 +299,7 @@
             methods: {
                 removePost: function (e) {
                     const buttonValue = e.target.value;
-                    alert(buttonValue);
+                    alert("삭제하시겠습니까?");
                     axios.delete('/meetpost/delete/' + buttonValue);
                     location.href = "/meetpost";
                 },
