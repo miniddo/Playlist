@@ -61,9 +61,10 @@
                     <!-- Widget: Categories -->
                     <div class="widget">
 
-                        <div class="title"><a href="http://localhost:3000/meetpost">Categories</a></div>
-                        <ul class="sidebar-menu"> <!--id="categorylist"-->
-                            <li v-for="c in category" v-bind:value="c.id" v-on:click="search(c.id)"><a>{{c.categoryname}}</a></li>
+                        <div class="title"><a href="/meetpost">Categories</a></div>
+                        <ul class="sidebar-menu">
+                            <li v-for="c in category"><a
+                                    v-bind:href="'/category/categorylist?id='+c.id">{{c.categoryname}}</a></li>
                         </ul>
 
                     </div>
@@ -92,46 +93,22 @@
 
                                 </a>
                                 <div class="information">
-                                    <div class="h3 title"><a v-bind:href="'/meetpost/modify?id='+p.id">{{ p.title }}</a>
+                                    <div class="h3 title">{{ p.title }}
                                     </div>
                                     <div class="description">
                                         by {{p.user.username}}
                                     </div>
                                     <div class="read-more">
-                                        <a v-bind:href="'/meetpost/detailpost?id='+p.id">Read more <i class="fa fa-fw fa-arrow-right"></i> </a>
+                                        <a v-bind:href="'/meetpost/detailpost?id='+p.id">Read more <i
+                                                class="fa fa-fw fa-arrow-right"></i> </a>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-
-                    <!-- Pagination -->
-                    <div class="col-md-12 text-center">
-                        <ul class="pagination">
-                            <li><a href="#">&laquo;</a></li>
-                            <!-- <li><button disabled="pageNum === 0" type="button" onclick="prePage()">이전</button></li> -->
-                            <li><span>Page 1 of 5</span></li>
-                            <!-- <li><span class="page-count">{{ pageNum + 1 }} / {{ pageCount }} 페이지</span></li> -->
-                            <li><a href="#">&raquo;</a></li>
-                            <!-- <li><button disabled="pageNum >= pageCount - 1" type="button" onclick="nextPage()">다음</button></li> -->
-                        </ul>
-                    </div>
-                    <!-- /Pagination -->
-
-                    <!-- Pagination -->
-                    <!-- <div class="col-md-12 text-center">
-                        <ul class="pagination">
-                           
-                        </ul>
-                    </div> -->
-                    <!-- /Pagination -->
-
-                    
-
-                    <div class="col-md-12 text-center">
+                    <div class="col-md-12 text-right">
                         <button v-on:click="moveWrite" class="btn btn-theme">글작성</button>
-                    </div>        
-
+                    </div>
                 </div>
                 <!-- /Blog Content -->
 
@@ -186,7 +163,7 @@
             el: '#app',
             data: {
                 posts: [],
-                category: [],
+                category: []
             },
             created: function () {
                 axios.get('/category')
@@ -209,19 +186,17 @@
                 moveWrite: function () {
                     location.href = "meetpost/writepage"
                 },
-                search: function(value) {
-                    axios.get('/meetpost/search?categoryid='+value)
-                    .then(function(res) {
-                        this.posts = res.data;
-                    }.bind(this))
-                    .catch(function(err) {
-                        console.log(err);
-                    });
-                },
-
+                search: function (value) {
+                    axios.get('/meetpost/search?categoryid=' + value)
+                        .then(function (res) {
+                            this.posts = res.data;
+                        }.bind(this))
+                        .catch(function (err) {
+                            console.log(err);
+                        });
+                }
             }
         });
-
     </script>
 </body>
 
