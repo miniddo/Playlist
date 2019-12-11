@@ -56,27 +56,6 @@
         <div class="container">
             <div class="row">
 
-                <!-- Blog Sidebar -->
-                <!-- <div class="col-md-3"> -->
-
-                <!-- Widget: Categories -->
-                <!-- <div class="widget">
-
-                        <div class="title">Categories</div>
-                        <ul class="sidebar-menu">
-                            <li><a href="#">외국어</a></li>
-                            <li><a href="#">게임</a></li>
-                            <li><a href="#">요리</a></li>
-                            <li><a href="#">음악</a></li>
-                            <li><a href="#">youtube</a></li>
-                            <li><a href="#">IT</a></li>
-                        </ul>
-
-                    </div> -->
-                <!-- /Widget: Categories -->
-                <!-- </div> -->
-                <!-- /Blog Sidebar -->
-
                 <div class="col-sm-8">
 
                     <div class="contact-form" id="app">
@@ -268,8 +247,9 @@
                         return false;
                     }
 
-                    axios.patch('/meetpost/modify/'+id, this.post)
+                    axios.patch('/meetpost/modify/'+id, this.post, { headers: { authorization: localStorage.getItem('token') } })
                     .then(function (res) {
+                        alert("수정되었습니다");
                         location.href="/meetpost/detailpost?id="+id;
                     }.bind(this))
                     .catch(function(err){
@@ -277,7 +257,6 @@
                     });
                 }
             }
-
         });
 
     </script>

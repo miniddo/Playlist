@@ -38,7 +38,7 @@
             <div class="row">
                 <!-- Page Title -->
                 <div class="col-md-8">
-                    <h1 class="title">Blog - Posts Write</h1>
+                    <h1 class="title">Blog - Reviews Write</h1>
                 </div>
                 <!-- /Page Title -->
             </div>
@@ -57,52 +57,27 @@
                             <input type="hidden" name="form" value="Contact Page">
                             <div class="row">
                                 <div class="form-group col-md-4">
-                                    <select class="form-control" v-model="post.categoryId" ref="categoryid">
+                                    <select class="form-control" v-model="review.categoryId" ref="categoryid">
                                         <option value="0" selected>카테고리 선택</option>
                                         <option v-for="c in category" v-bind:value="c.id">{{c.categoryname}}</option>
                                     </select>
                                 </div>
                                 <div class="form-group col-md-12">
-                                    <input type="text" class="form-control" v-model="post.title" ref="title"
+                                    <input type="text" class="form-control" v-model="review.title" ref="title"
                                         placeholder="제목을 입력해주세요.">
                                 </div>
-                                <!-- <div class="form-group col-md-12">
-                                    <input  class="form-control"
-                                        placeholder="사진 or 동영상 중 1개 이상은 필수로 넣어주세요." >
-                                </div> -->
-                                <div class="form-group col-md-6">
-                                    <input type="text" class="form-control" v-model="post.headcount" ref="headcount"
-                                        placeholder="인원 수를 입력해주세요.">
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="selectbox">
-                                    <div class="form-group col-md-4">
-                                        <label for="select">나이</label>
-                                        <select class="form-control" v-model="post.age">
-                                            <option v-for="a in age">{{a.age}}</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-
+                
                             <div class="row">
                                 <div class="form-group col-md-12">
-                                    <textarea class="form-control" v-model="post.record" ref="record"
-                                        placeholder="이력(필수)"></textarea>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="form-group col-md-12">
-                                    <textarea class="form-control" v-model="post.content" ref="content"
+                                    <textarea class="form-control" v-model="review.content" ref="content"
                                         placeholder="내용(필수)"></textarea>
                                 </div>
                             </div>
 
                             <div class="row">
                                 <div class="form-group col-md-12 text-center">
-                                    <button v-on:click="savePost" class="btn btn-theme">등록</button>
-                                    <button v-on:click="listPage" class="btn btn-theme">취소</button>
+                                    <button v-on:click="resavePost" class="btn btn-theme">등록</button>
+                                    <button v-on:click="relistPage" class="btn btn-theme">취소</button>
                                 </div>
                             </div>
                         </form>
@@ -159,25 +134,10 @@
             el: '#app',
             data: {
                 category: [],
-                age: [
-                    { id: 0, age: '제한없음' },
-                    { id: 1, age: '10대' },
-                    { id: 2, age: '20대' },
-                    { id: 3, age: '30대' },
-                    { id: 4, age: '40대' },
-                    { id: 5, age: '50대' }
-                ],
-                post: {
+                review: {
                     categoryId: '',
                     title: '',
-                    headcount: '',
-                    age: '',
-                    record: '',
                     content: '',
-                    participants: 0,
-                    good: 0,
-                    count: 0,
-                    photo: ''
                 }
 
             },
@@ -200,56 +160,32 @@
                     });
             },
             methods: {
-                savePost: function () {
+                resavePost: function () {
 
-                    if (this.post.categoryId == '') {
-                        alert("카테고리를 선택해주세요");
-                        this.$refs.categoryid.focus();
-                        return false;
-                    }
-
-                    if (this.post.title == '') {
+                    if (this.review.title == '') {
                         alert("제목을 입력해주세요");
                         this.$refs.title.focus();
                         return false;
                     }
 
-                    if (this.post.headcount == '') {
-                        alert("인원수를 입력해주세요");
-                        this.$refs.headcount.focus();
-                        return false;
-                    }
-
-                    if (this.post.age == '') {
-                        alert("나이대를 선택해주세요");
-                        this.$refs.age.focus();
-                        return false;
-                    }
-
-                    if (this.post.record == '') {
-                        alert("이력을 입력해주세요");
-                        this.$refs.record.focus();
-                        return false;
-                    }
-
-                    if (this.post.content == '') {
+                    if (this.review.content == '') {
                         alert("내용을 입력해주세요");
                         this.$refs.content.focus();
                         return false;
                     }
 
                     var token = localStorage.getItem('token');
-                    axios.post('/meetpost/write', this.post, { headers: { authorization: token } })
+                    axios.post('/review/review-write', this.review, { headers: { authorization: token } })
                         .then(function (res) {
-                            alert("등록되었습니다!!!");
-                            location.href = "/meetpost";
+                            alert('등록하시겠습니까?');
+                            location.href = "/review";
                         }.bind(this))
                         .catch(function (err) {
                             console.log(err)
                         });
                 },
-                listPage: function () {
-                    location.href = "/meetpost";
+                relistPage: function () {
+                    location.href = "/review";
                 }
             }
 

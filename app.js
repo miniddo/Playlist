@@ -12,8 +12,9 @@ var userRouter = require('./routes/user');
 var emailsearchRouter = require('./routes/emailsearch');
 var meetpostRouter = require('./routes/meetpost');
 var categoryRouter = require('./routes/category');
-
-var favoriteRouter = require('./routes/favorite');
+var mypageRouter = require('./routes/mypage');
+var fileRouter = require('./routes/file');
+var reviewRouter = require('./routes/review');
 
 var sequelize = require('./models').sequelize;
 
@@ -29,14 +30,16 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 app.use('/', indexRouter);
 app.use('/user', userRouter);
 app.use('/meetpost', meetpostRouter);
 app.use('/category', categoryRouter);
 app.use('/emailsearch', emailsearchRouter);
-
-app.use('/favorite', favoriteRouter);
+app.use('/mypage', mypageRouter);
+app.use('/file', fileRouter);
+app.use('/review', reviewRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

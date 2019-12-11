@@ -43,17 +43,18 @@
                                 </div>
 
                                 <div class="row form-row text-center">
-                                    <div class="col-sm-12">
-                                        <button v-on:click="login" class="btn btn-theme">Sign in</button>
+                                        <div class="col-md-12">
+                                        <button v-on:click="login" class="btn btn-theme">　　　　　　　Sign in　　　　　　　</button>
                                     </div>
-                                    <div class="col-xs-12">
+                                    <!-- <div class="col-xs-12 ">
                                         <button type="button" v-on:click="authTest"
                                             class="btn btn-theme">개인정보조회</button>
-                                    </div>
+                                    </div> -->
+                                    <br><br>
                                     <div class="col-sm-12">
                                         <!-- 페이스북 로그인 구현 -->
                                         <button onclick="checkLoginState();"
-                                            class="btn btn-info">Facebook Login</button>
+                                            class="btn btn-info">　　　　　Facebook Login　　　　　</button>
                                     </div>
                                     <br><br>
 
@@ -62,12 +63,12 @@
                                 <div class="row form-row text-center">
                                     <div class="col-xs-6">
                                         <div class="checkbox-custom checkbox-theme">
-                                            <input type="checkbox" id="sign-in-remember">
-                                            <label for="sign-in-remember">Remember me</label>
+                                            <!-- <input type="checkbox" id="sign-in-remember"> -->
+                                            <label for="sign-in-remember"></label>
                                         </div>
                                     </div>
                                     <div class="col-xs-6">
-                                        <a href="/emailsearch">Forgot password?</a>
+                                        <a href="/emailsearch">Forgot Email?</a>
                                     </div>
                                 </div>
 
@@ -99,6 +100,7 @@
 
             login: function () {
                 event.preventDefault();
+
                 if (this.$refs.useremail.value == "") {
                     alert("이메일을 입력해주세요.");
                     this.$refs.useremail.focus();
@@ -113,7 +115,7 @@
 
                 axios.post('/user/login', this.user)
                     .then((response) => {
-
+                        
                         //토큰값 확인
                         console.log(response.data);
 
@@ -133,25 +135,21 @@
                     })
                     .catch(function (err) {
                         console.log(err);
-                    })
+                    });
             },
 
             authTest: function () {
-
                 var token = localStorage.getItem('token');
-
+                
                 axios.get('/user/profile', { headers: { authorization: token } }).then(function (response) {
                     console.log(response.data);
-                    //alert(response.data); //aler 창으로 띄우고 싶은데 잘 안됨 ㅠㅠ
-                    this.articles = response.data;
+                    // alert(response.data);
                 }.bind(this))
                     .catch(function (err) {
                         console.log(err);
                     });
             }
         }
-
-
     });
 
     //페이스북 인증 초기설정
