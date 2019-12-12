@@ -78,13 +78,9 @@
 
                         <div class="col-sm-4 col-xs-12" v-for="p in posts">
                             <div class="project-item">
-                                <a href="/images/project-01.jpg" class="image-popup">
                                     <div class="gallery-image">
-
-                                        <img src="/images/project-01.jpg">
+                                        <img v-bind:src="'/'+p.meetphoto">
                                     </div>
-
-                                </a>
                                 <div class="information">
                                     <div class="h3 title"><a v-bind:href="'/meetpost/modify?postid='+p.id">{{ p.title }}</a>
                                     </div>
