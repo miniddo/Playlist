@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <!-- Page title -->
+    <title>Your Page</title>
+
+    <!-- Meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="/img/favicon.png">
+
+    <!-- Style -->
+    <link rel="stylesheet" href="/css/theme-mariner.css">
+    <link rel="alternate stylesheet" href="/css/theme-mariner.css" title="theme-mariner">
+
+
+</head>
+
+<body>
+
+    <!-- Preloader -->
+    <div id="preloader">
+        <div class="loader"></div>
+    </div>
+    <!-- /Preloader -->
+
+    <!-- Header -->
+    <% include ./common/header %>
+    <!-- /Header -->
+
+    <!-- Page Header -->
+    <div class="inner-page-header">
+        <div class="container">
+            <div class="row">
+
+                <!-- Page Title -->
+                <div class="col-md-8">
+                    <h1 class="title">Your page</h1>
+                    <div class="subtitle">타인 정보</div>
+                </div>
+                <!-- /Page Title -->
+
+            </div>
+        </div>
+    </div>
+    <!-- /Page Header -->
+
+    <!-- Main -->
+    <main class="main-container" id="app">
+
+        <div class="container">
+            <div class="row">
+
+                <!-- Section Content -->
+                <div class="row">
+
+                    <!-- Contact Information -->
+                    <div class="col-sm-11">
+
+                        <h3><b>Information</b></h3>
+                        <p>
+                            
+                        </p>
+                        <div class="row">
+                            <!-- 타인 정보 목록 -->
+                            <div class="col-sm-5">
+                                <img v-bind:src="user.photofullroute" width="300px" height="300px">
+                            </div>
+                            <div class="col-sm-7">
+                                <ul class="list-lined">
+                                    <br><li><i class="icon fa fa-fw fa-envelope"></i><span>E-mail</span> {{user.useremail}}</li>
+                                    <li><i class="icon fa fa-fw fa-sign-in"></i><span>이름</span> {{user.username}}</li><br><br>
+                                    
+                                    <li><i class="icon fa fa-fw fa-dribbble"></i><span>소개글</span> {{user.info}}</li><br><br>
+                                </ul>
+                            </div>
+                        </div>
+
+
+                        <!-- <div class="row" v-else="!userid">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <br><i class="icon fa fa-fw fa-sign-in"></i><span>　로그인이 필요한 서비스입니다.</span><br>   
+                                </div>
+                            </div>
+                        </div> -->
+
+                    </div>
+                    <!-- /Contact Information -->
+                </div>
+            </div>
+        </div>
+        <br>
+    </main>
+    <!-- /Main -->
+
+    <!-- Footer -->
+    <% include ./common/footer %>
+    <!-- /Footer -->
+
+    <!-- Scroll To Top -->
+    <div id="scroll-to-top" class="scroll-to-top">
+        <i class="icon fa fa-angle-up"></i>
+    </div>
+    <!-- /Scroll To Top -->
+
+    <!-- Modal: Sign In -->
+    <% include ./common/sign_in %>
+    <!-- Modal: /Sign In -->
+
+    <!-- Modal: Sign Up -->
+    <% include ./common/sign_up %>
+    <!-- Modal: /Sign Up -->
+
+    <!-- Modal: Result Message -->
+    <% include ./common/result_message %>
+    <!-- /Modal: Result Message -->
+
+    <!-- SCRIPTS -->
+    <script src="/js/jquery-2.2.0.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+    <script src="/js/owl.carousel.min.js"></script>
+    <script src="/js/jquery.magnific-popup.min.js"></script>
+    <script src="/js/jquery.validate.min.js"></script>
+    <script src="/js/jquery.stellar.min.js"></script>
+    <script src="/js/wow.min.js"></script>
+    <script src="/js/jquery.animateNumber.min.js"></script>
+    <script src="/js/jquery.appear.js"></script>
+    <script src="/js/general.js"></script>
+    <!-- /SCRIPTS -->
+
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+    <script>
+
+        $.urlParam = function (name) {
+            var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
+            if (results == null) {
+                return null;
+            }
+            else {
+                return results[1] || 0;
+            }
+        }
+        var id = $.urlParam('user');
+        var app = new Vue({
+            el: '#app',
+            data: {
+                user: {},
+                userid: ''
+            },
+            created: function () {
+                axios.get('/user/checkLogin', { headers: { authorization: localStorage.getItem('token') } })
+                    .then(function (res) {
+                        
+                        if (res.data.code == 419) {
+                            console.log(res.data.message);
+                            return false;
+                            }
+                        if (res.data.code == 401) {
+                            console.log(res.data.message);
+                            return false;
+                        }
+                        if (res.data.code == 200) {
+                            this.userid = res.data.result;
+                        }
+                        
+                    }.bind(this))
+                    .catch(function (err) {
+                        console.log(err);
+                    });
+
+                axios.get('/user/profile', { headers: { authorization: localStorage.getItem('token') } }).then(function (res) {
+                    this.user = res.data.result;
+                }.bind(this))
+                    .catch(function (err) {
+                        console.log(err);
+                });
+
+                axios.get('/yourpage/' + id)
+                    .then(function (res) {
+                        console.log(res.data);
+                        this.user = res.data;
+                    }.bind(this))
+                    .catch(function (err) {
+                        console.log(err);
+                    });
+            }
+        });
+    </script>
+</body>
+
+</html>
