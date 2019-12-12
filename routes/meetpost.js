@@ -3,8 +3,6 @@ var router = express.Router();
 var MeetPost = require('../models/index.js').MeetPost;
 var Category = require('../models/index.js').Category;
 var User = require('../models/index.js').User;
-var Comment = require('../models/index.js').Comment;
-var Favorite = require('../models/index.js').Favorite;
 var Participants = require('../models/index.js').Participants;
 const { verifyToken } = require('./middlewares');
 
@@ -15,7 +13,6 @@ router.get('/writepage', function (req, res, next) {
 
 // 작성한 글 데이터를 DB에 저장
 router.post('/write', verifyToken, function (req, res, next) {
-  console.log("사용자아이디",req.decoded.id);
     MeetPost.create({
       categoryId: req.body.categoryId,
       title: req.body.title,
@@ -26,7 +23,7 @@ router.post('/write', verifyToken, function (req, res, next) {
       content: req.body.content,
       good: 0,
       count: 0,
-      meetphoto: 'ddd',
+      meetphoto: req.body.photo,
       userId: req.decoded.id,
       createdAt:new Date
     })
@@ -108,7 +105,7 @@ router.patch('/modify/:id', verifyToken, function(req, res, next) {
       age: req.body.age,
       record: req.body.record,
       content: req.body.content,
-      // meetphoto: req.body.meetphoto,
+      meetphoto: req.body.photo,
       userId: req.decoded.id,
     }, 
     { 
@@ -123,64 +120,9 @@ router.patch('/modify/:id', verifyToken, function(req, res, next) {
     });
 });
 
-// 댓글 가져오기
-router.get('/comments/:id', function(req, res, next) {
-  Comment.findAll({
-    include: [{ model: MeetPost }],
-    where: { meetpostId: req.params.id } 
-  })
-  .then((posts) => {
-    res.json(posts); 
-  }).catch((err) => {
-    console.error(err);
-    next(err);
-  });
-});
-
-//댓글 등록
-router.post('/comment/:meetpostId', function(req, res, next) {
-
-  var meetpostId = req.params.meetpostId;
-
-  Comment.create({
-    meetpostId: meetpostId,
-    comment: req.body.comment,
-    createdAt: new Date,
-    where: { id: req.params.id }
-  })
-    .then((result) => {
-      res.json(result);
-    })
-    .catch((err) => {
-      console.error(err);
-      next(err);
-    });
-});
-
-
 // 글 삭제
 router.delete('/delete/:id', function(req, res, next) {
   MeetPost.destroy({ where: { id: req.params.id } })
-    .then((result) => {
-      res.json(result);
-    })
-    .catch((err) => {
-      console.error(err);
-      next(err);
-    });
-});
-
-// 즐겨찾기
-router.post('/favorite/:meetpostId', function(req, res, next) {
-
-  var meetpostId = req.params.meetpostId;
-  
-  Favorite.create({
-    meetpostId: meetpostId,
-    state: 1,
-    where: { id: req.params.id }
-  })
-
     .then((result) => {
       res.json(result);
     })
@@ -197,6 +139,7 @@ router.post('/participate/:meetpostId', function(req, res, next) {
   
   Participants.create({
     meetpostId: meetpostId,
+    userId: req.body.userId,
     state: 1,
     where: { id: req.params.id }
   })
