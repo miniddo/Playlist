@@ -12,11 +12,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <!-- Favicon -->
-    <link rel="shortcut icon" href="img/favicon.png">
+    <link rel="shortcut icon" href="/img/favicon.png">
 
     <!-- Style -->
-    <link rel="stylesheet" href="css/theme-mariner.css">
-    <link rel="alternate stylesheet" href="css/theme-mariner.css" title="theme-mariner">
+    <link rel="stylesheet" href="/css/theme-mariner.css">
+    <link rel="alternate stylesheet" href="/css/theme-mariner.css" title="theme-mariner">
 
 
 </head>
@@ -41,7 +41,7 @@
                 <!-- Page Title -->
                 <div class="col-md-8">
                     <h1 class="title">My page</h1>
-                    <div class="subtitle">사용자 정보</div>
+                    <div class="subtitle">좋아요 목록</div>
                 </div>
                 <!-- /Page Title -->
 
@@ -63,10 +63,10 @@
                     <div class="widget">
                         <div class="title">My Page</div>
                         <ul class="sidebar-menu">
-                            <li><a href="/mypage">사용자 정보</a></li>
-                            <li><a href="/mypage/mypage-good">좋아요 목록</a></li>
-                            <li><a href="/mypage/mypage-favorite">즐겨찾기 목록</a></li>
-                            <li><a href="/mypage/mypage-participant">참여 목록</a></li>
+                                <li><a href="/mypage">사용자 정보</a></li>
+                                <li><a href="/mypage/mypage-good">좋아요 목록</a></li>
+                                <li><a href="/mypage/mypage-favorite">즐겨찾기 목록</a></li>
+                                <li><a href="/mypage/mypage-participant">참여 목록</a></li>
                         </ul>
                     </div>
                     <!-- /Widget: Categories -->
@@ -84,19 +84,33 @@
                             
                         </p>
                         <div class="row" v-if="userid">
-                            <div class="col-sm-5">
-                                <img v-bind:src="user.photofullroute" width="300px" height="300px">
-                            </div>
-                            <div class="col-sm-7">
-                                <ul class="list-lined">
-                                    <br><li><i class="icon fa fa-fw fa-envelope"></i><span>E-mail</span> {{user.useremail}}</li>
-                                    <li><i class="icon fa fa-fw fa-sign-in"></i><span>이름</span> {{user.username}}</li>
-                                    <li><i class="icon fa fa-fw fa-pinterest"></i><span>생년월일</span> {{user.birth}}</li>
-                                    <li><i class="icon fa fa-fw fa-phone"></i><span>전화번호</span> {{user.phone}}</li><br><br>
-                                    <li><i class="icon fa fa-fw fa-phone"></i><span>소개글</span> {{user.info}}</li><br><br>
-                                    <li><button class="btn btn-green" v-on:click="modifyUser">사용자 정보 수정</button></li>
-                                </ul>
-                            </div>
+                            <!-- 좋아요 목록 -->
+                            <!-- <div class="projects-list">
+
+                                <div class="col-sm-4 col-xs-12" v-for="p in posts">
+                                    <div class="project-item">
+                                        
+                                            <div class="gallery-image">
+        
+                                                <img v-bind:src="p.meetphoto">
+                                            </div>
+        
+                                        
+                                        <div class="information">
+                                            <div class="h3 title">{{ p.title }}
+                                            </div>
+                                            <div class="description">
+                                                by {{p.user.username}}
+                                            </div>
+                                            <div class="read-more">
+                                                <a v-bind:href="'/meetpost/detailpost?id='+p.id">Read more <i
+                                                        class="fa fa-fw fa-arrow-right"></i> </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div> -->
+                            <!-- /좋아요목록 -->
                         </div>
 
                         <div class="row" v-if="!userid">
@@ -137,16 +151,16 @@
     <!-- /Modal: Result Message -->
 
     <!-- SCRIPTS -->
-    <script src="js/jquery-2.2.0.min.js"></script>
-    <script src="js/bootstrap.min.js"></script>
-    <script src="js/owl.carousel.min.js"></script>
-    <script src="js/jquery.magnific-popup.min.js"></script>
-    <script src="js/jquery.validate.min.js"></script>
-    <script src="js/jquery.stellar.min.js"></script>
-    <script src="js/wow.min.js"></script>
-    <script src="js/jquery.animateNumber.min.js"></script>
-    <script src="js/jquery.appear.js"></script>
-    <script src="js/general.js"></script>
+    <script src="/js/jquery-2.2.0.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+    <script src="/js/owl.carousel.min.js"></script>
+    <script src="/js/jquery.magnific-popup.min.js"></script>
+    <script src="/js/jquery.validate.min.js"></script>
+    <script src="/js/jquery.stellar.min.js"></script>
+    <script src="/js/wow.min.js"></script>
+    <script src="/js/jquery.animateNumber.min.js"></script>
+    <script src="/js/jquery.appear.js"></script>
+    <script src="/js/general.js"></script>
     <!-- /SCRIPTS -->
 
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.js"></script>
@@ -157,7 +171,8 @@
             el: '#app',
             data: {
                 userid: '',
-                user: {}
+                user: {},
+                posts:[]
             },
             created: function () {
                 axios.get('/user/checkLogin', { headers: { authorization: localStorage.getItem('token') } })
@@ -186,11 +201,14 @@
                     .catch(function (err) {
                         console.log(err);
                 });
-            },
-            methods: {
-                modifyUser: function() {
-                    
-                }
+                
+                axios.get('/favorite/favoritelist', { headers: { authorization: localStorage.getItem('token') } })
+                .then(function(res) {
+                    console.log(res);
+                }.bind(this))
+                .catch(function(err) {
+                    console.log(err);
+                })
             }
         });
     </script>
