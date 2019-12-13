@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <!-- Page title -->
+    <title>리뷰글 수정</title>
+
+    <!-- Meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="/img/favicon.png">
+
+    <!-- Style -->
+    <link rel="stylesheet" href="/css/theme-mariner.css">
+    <link rel="alternate stylesheet" href="/css/theme-mariner.css" title="theme-mariner">
+    <link rel="stylesheet" href="/css/web-font.css">
+
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+</head>
+
+<body>
+
+    <!-- Preloader -->
+    <div id="preloader">
+        <div class="loader"></div>
+    </div>
+    <!-- /Preloader -->
+
+    <!-- Header -->
+    <% include ./common/header %>
+    <!-- /Header -->
+
+    <!-- Page Header -->
+    <div class="inner-page-header">
+        <div class="container">
+            <div class="row">
+                <!-- Page Title -->
+                <div class="col-md-8">
+                    <h1 class="title">Review Posts Modify</h1>
+                    <!-- <div class="subtitle">There are many variations of passages </div> -->
+                </div>
+                <!-- /Page Title -->
+            </div>
+        </div>
+    </div>
+    <!-- /Page Header -->
+
+    <!-- Main -->
+    <main class="main-container">
+
+        <div class="container">
+            <div class="row">
+
+                <div class="col-sm-8">
+
+                    <div class="contact-form" id="app">
+
+                        <h3>REVIEW WRITE</h3>
+
+                        <div>
+                            <input type="hidden" name="form" value="Contact Page">
+                            <div class="row">
+                                <div class="form-group col-md-4">
+                                    <select class="form-control" v-model="review.categoryId" ref="categoryid">
+                                        <option value="0" selected>카테고리 선택</option>
+                                        <option v-for="c in category" v-bind:value="c.id">{{c.categoryname}}</option>
+                                    </select>
+                                </div>
+                                <div class="form-group col-md-12">
+                                    <input type="text" class="form-control" v-model="review.title" ref="title"
+                                        placeholder="제목을 입력해주세요.">
+                                </div>
+                    
+                                <div class="form-group col-md-12">
+                                    <textarea class="form-control" v-model="review.content" ref="content"
+                                        placeholder="내용(필수)"></textarea>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="form-group col-md-12 text-center">
+                                    <button v-on:click="patchPost" class="btn btn-theme">수정</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- /Contact Form -->
+            </div>
+        </div>
+    </main>
+    <!-- /Main -->
+
+
+    <!-- Footer -->
+    <% include ./common/footer %>
+    <!-- /Footer -->
+
+    <!-- Scroll To Top -->
+    <div id="scroll-to-top" class="scroll-to-top">
+        <i class="icon fa fa-angle-up"></i>
+    </div>
+    <!-- /Scroll To Top -->
+
+    <!-- Modal: Sign In -->
+    <% include ./common/sign_in %>
+    <!-- Modal: /Sign In -->
+
+    <!-- Modal: Sign Up -->
+    <% include ./common/sign_up %>
+    <!-- Modal: /Sign Up -->
+
+    <!-- Modal: Result Message -->
+    <% include ./common/result_message %>
+    <!-- /Modal: Result Message -->
+
+
+    <!-- SCRIPTS -->
+    <script src="/js/jquery-2.2.0.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+    <script src="/js/owl.carousel.min.js"></script>
+    <script src="/js/jquery.magnific-popup.min.js"></script>
+    <script src="/js/jquery.validate.min.js"></script>
+    <script src="/js/jquery.stellar.min.js"></script>
+    <script src="/js/wow.min.js"></script>
+    <script src="/js/jquery.animateNumber.min.js"></script>
+    <script src="/js/jquery.appear.js"></script>
+    <script src="/js/general.js"></script>
+    <!-- /SCRIPTS -->
+
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+    <script>
+        
+        $.urlParam = function (name) {
+            var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
+            if (results == null) {
+                return null;
+            }
+            else {
+                return results[1] || 0;
+            }
+        }
+        var id = $.urlParam('reviewid');
+
+        var app = new Vue({
+            el: '#app',
+            data: {
+                category: [],
+                review: [],
+
+            },
+            created: function () {
+                axios.get('/category')
+                    .then(function (res) {
+                        this.category = res.data;
+                    }.bind(this))
+                    .catch(function (err) {
+                        console.log(err);
+                    });
+
+                axios.get('/review/modify/' + id)
+                    .then(function (res) {
+                        this.review = res.data;
+                    }.bind(this))
+                    .catch(function (err) {
+                        console.log(err);
+                    });
+            },
+            methods: {
+                patchPost: function () {
+
+                    if (this.review.categoryId == '') {
+                        alert("카테고리를 선택해주세요");
+                        this.$refs.categoryid.focus();
+                        return false;
+                    }
+
+                    if (this.review.title == '') {
+                        alert("제목을 입력해주세요");
+                        this.$refs.title.focus();
+                        return false;
+                    }
+
+                    if (this.review.content == '') {
+                        alert("내용을 입력해주세요");
+                        this.$refs.content.focus();
+                        return false;
+                    }
+
+                    axios.patch('/review/moim/modify/'+id, this.review, { headers: { authorization: localStorage.getItem('token') } })
+                    .then(function(response){
+                        console.log(response);
+                        alert("수정되었습니다");
+                        location.href="/review/detailpost?id="+id;
+
+                        }.bind(this))
+                        .catch(function(err){
+                            console.log(err);
+                        });
+                    
+                }
+            }
+        });
+
+    </script>
+</body>
+
+</html>
