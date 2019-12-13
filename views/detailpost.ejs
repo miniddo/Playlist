@@ -17,6 +17,7 @@
     <!-- Style -->
     <link rel="stylesheet" href="/css/theme-mariner.css">
     <link rel="alternate stylesheet" href="/css/theme-mariner.css" title="theme-mariner">
+    <link rel="stylesheet" href="/css/web-font.css">
 
 </head>
 
@@ -39,7 +40,7 @@
 
                 <!-- Page Title -->
                 <div class="col-md-8">
-                    <h1 class="title">Blog - Detail Post</h1>
+                    <h1 class="title">Meet Detail Post</h1>
                     <!-- <div class="subtitle">There are many variations of passages </div> -->
                 </div>
                 <!-- /Page Title -->
@@ -138,8 +139,10 @@
                                             v-bind:value="posts.id">즐겨찾기 해제</button>
                                         <button v-else="favorite_state == false" class="btn btn-red btn-o-light-bg" v-on:click="favorite($event)"
                                         v-bind:value="posts.id">즐겨찾기 추가</button>
-                                        <button class="btn btn-orange" v-on:click="participate($event)"
-                                            v-bind:value="posts.id">참여하기</button>
+                                        <button v-if="participant_state == true" class="btn btn-orange" v-on:click="participant($event)"
+                                            v-bind:value="posts.id">참여하기 해제</button>
+                                        <button v-else="participant_state == false" class="btn btn-orange btn-o-light-bg" v-on:click="participant($event)"
+                                        v-bind:value="posts.id">참여하기 추가</button>
                                     </ul>
                                 </div>
                             </div>
@@ -153,8 +156,8 @@
 
                             <h4 class="title">Recent Comments</h4>
 
-                            <ul class="comments" v-for="comment in comments">
-                                <li>
+                            <ul class="comments list-group list-group-flush" v-for="comment in comments">
+                                <li class="list-group-item">
                                     <div class="media">
                                         <div class="media-left">
                                             <div class="image">
@@ -163,18 +166,20 @@
                                         </div>
 
                                         <div class="media-body">
-                                            <h4 class="author">{{comment.user.username}}</h4>
+                                            <h4 class="author"><a v-bind:href="'/yourpage?user='+posts.user.id">{{comment.user.username}}</a></h4>
                                             <span class="date">{{comment.createdAt}}</span>
                                             <p class="text">
                                                 {{comment.comment}}
                                             </p>
                                             <div class="project">
                                                 <div class="comments-bottom text-right">
-                                                    <a href="/images/project-02.jpg" class="project-item image-popup"><i
+                                                    <a v-bind:href="'/yourpage?user='+posts.user.id" class="project-item image-popup"><i
                                                             class="icon fa fa-fw fa-search"></i>
                                                         SHOW AUTHOR INFORMATION</a>
+                                                    <button class="btn btn-danger" v-on:click="deleteComment($event)" v-bind:value="comment.id" v-if="comment.userId == userid">삭제</button>
                                                 </div>
                                             </div>
+                                            
                                         </div>
                                     </div>
                                 </li>
@@ -278,12 +283,13 @@
         var app = new Vue({
             el: '#app',
             data: {
-                posts: {},
+                posts: [],
                 category: [],
                 reply: { comment: '' },
                 comments: [],
                 userid: '',
-                favorite_state: ''
+                favorite_state: '',
+                participant_state: '',
             },
             created: function () {
                 axios.get('/category')
@@ -327,6 +333,14 @@
                         console.log(err);
                     });
 
+                axios.get('/participant/' + id, { headers: { authorization: localStorage.getItem('token') } })
+                    .then(function (res) {
+                        this.participant_state = res.data.state;
+                    }.bind(this))
+                    .catch(function (err) {
+                        console.log(err);
+                    });    
+
             },
             methods: {
                 removePost: function (e) {
@@ -344,12 +358,12 @@
                         .then(function (res) {
                             if (res.data.code == 419) {
                                 alert("로그인이 필요합니다");
-                                location.href = "/";
+                                location.href = "/meetpost/detailpost?id=" + cbuttonValue;
                                 return false;
                             }
                             if (res.data.code == 401) {
                                 alert("로그인이 필요합니다");
-                                location.href = "/";
+                                location.href = "/meetpost/detailpost?id=" + cbuttonValue;
                                 return false;
                             }
                             if (res.data.code == 200) {
@@ -369,6 +383,14 @@
                             console.log(err);
                         });
                 },
+                deleteComment: function(e) {
+                    const buttonValue = e.target.value;
+                    var del = confirm("댓글을 삭제하시겠습니까?")
+                    if (del) {
+                        axios.delete('/comment/delete/' + buttonValue);
+                        location.href = "/meetpost/detailpost?id="+this.posts.id;
+                    }
+                },
                 gotolist: function () {
                     location.href = "/meetpost";
                 },
@@ -378,12 +400,12 @@
                         .then(function (res) {
                             if (res.data.code == 419) {
                                 alert("로그인이 필요합니다");
-                                location.href = "/";
+                                location.href = "/meetpost/detailpost?id=" + fbuttonValue;
                                 return false;
                             }
                             if (res.data.code == 401) {
                                 alert("로그인이 필요합니다");
-                                location.href = "/";
+                                location.href = "/meetpost/detailpost?id=" + fbuttonValue;
                                 return false;
                             }
                             if (res.data.code == 200) {
@@ -400,25 +422,26 @@
                             console.log(err);
                         });
                 },
-                participate: function (e) {
+                participant: function (e) {
                     const pbuttonValue = e.target.value;
-
                     axios.get('/user/checkLogin', { headers: { authorization: localStorage.getItem('token') } })
                         .then(function (res) {
                             if (res.data.code == 419) {
                                 alert("로그인이 필요합니다");
-                                location.href = "/";
+                                location.href = "/meetpost/detailpost?id=" + pbuttonValue;
                                 return false;
                             }
                             if (res.data.code == 401) {
                                 alert("로그인이 필요합니다");
-                                location.href = "/";
+                                location.href = "/meetpost/detailpost?id=" + pbuttonValue;
                                 return false;
                             }
                             if (res.data.code == 200) {
-                                var fav = confirm('참여하시겠습니까?')
-                                if (fav) {
-                                    axios.post('/meetpost/participate/' + pbuttonValue, { userId: res.data.result.id })
+                                if(this.participant_state) { // participant_state가 true이면
+                                    axios.post('/participant/' + pbuttonValue, { userId: res.data.result.id})
+                                    location.href = "/meetpost/detailpost?id=" + pbuttonValue;
+                                } else {  //participant_state가 false이면
+                                    axios.post('/participant/' + pbuttonValue, { userId: res.data.result.id, state: true })
                                     location.href = "/meetpost/detailpost?id=" + pbuttonValue;
                                 }
                             }

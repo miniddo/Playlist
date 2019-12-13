@@ -17,6 +17,7 @@
     <!-- Style -->
     <link rel="stylesheet" href="/css/theme-mariner.css">
     <link rel="alternate stylesheet" href="/css/theme-mariner.css" title="theme-mariner">
+    <link rel="stylesheet" href="/css/web-font.css">
 
 </head>
 
@@ -38,7 +39,7 @@
             <div class="row">
                 <!-- Page Title -->
                 <div class="col-md-8">
-                    <h1 class="title">Blog - Reviews Write</h1>
+                    <h1 class="title">Reviews Write</h1>
                 </div>
                 <!-- /Page Title -->
             </div>
@@ -53,7 +54,7 @@
                 <div class="col-sm-10">
                     <div class="contact-form" id="app">
                         <h3>POST WRITE</h3>
-                        <form class="form-ajax" id="fileForm">
+                        <form id="fileForm">
                             <input type="hidden" name="form" value="Contact Page">
                             <div class="row">
                                 <div class="form-group col-md-4">
@@ -139,8 +140,8 @@
                 review: {
                     categoryId: '',
                     title: '',
-                    introphoto: '',
                     content: '',
+                    introphoto: ''
                 }
 
             },
@@ -193,6 +194,7 @@
             
                 },
                 relistPage: function () {
+                    alert("작성이 취소되었습니다");
                     location.href = "/review";
                 },
                 fileupload: function() {

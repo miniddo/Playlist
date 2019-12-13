@@ -85,31 +85,28 @@
                         </p>
                         <div class="row" v-if="userid">
                             <!-- 좋아요 목록 -->
-                            <!-- <div class="projects-list">
+                            <div class="projects-list">
 
                                 <div class="col-sm-4 col-xs-12" v-for="p in posts">
                                     <div class="project-item">
                                         
                                             <div class="gallery-image">
         
-                                                <img v-bind:src="p.meetphoto">
+                                                <img v-bind:src="'/'+p.meetpost.meetphoto">
                                             </div>
         
                                         
                                         <div class="information">
-                                            <div class="h3 title">{{ p.title }}
-                                            </div>
-                                            <div class="description">
-                                                by {{p.user.username}}
+                                            <div class="h3 title">{{ p.meetpost.title }}
                                             </div>
                                             <div class="read-more">
-                                                <a v-bind:href="'/meetpost/detailpost?id='+p.id">Read more <i
+                                                <a v-bind:href="'/meetpost/detailpost?id='+p.meetpost.id">Read more <i
                                                         class="fa fa-fw fa-arrow-right"></i> </a>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div> -->
+                            </div>
                             <!-- /좋아요목록 -->
                         </div>
 
@@ -187,24 +184,16 @@
                             return false;
                         }
                         if (res.data.code == 200) {
-                            this.userid = res.data.result;
-                        }
-                        
+                            this.userid = res.data.result.id;
+                        } 
                     }.bind(this))
                     .catch(function (err) {
                         console.log(err);
                     });
 
-                axios.get('/user/profile', { headers: { authorization: localStorage.getItem('token') } }).then(function (res) {
-                    this.user = res.data.result;
-                }.bind(this))
-                    .catch(function (err) {
-                        console.log(err);
-                });
-                
                 axios.get('/favorite/favoritelist', { headers: { authorization: localStorage.getItem('token') } })
                 .then(function(res) {
-                    console.log(res);
+                    this.posts = res.data;
                 }.bind(this))
                 .catch(function(err) {
                     console.log(err);

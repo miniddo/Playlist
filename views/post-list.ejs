@@ -4,7 +4,7 @@
 <head>
 
     <!-- Page title -->
-    <title>Playlist</title>
+    <title>PLAYLIST</title>
 
     <!-- Meta -->
     <meta charset="utf-8">
@@ -17,6 +17,7 @@
     <!-- Style -->
     <link rel="stylesheet" href="css/theme-mariner.css">
     <link rel="alternate stylesheet" href="css/theme-mariner.css" title="theme-mariner">
+    <link rel="stylesheet" href="/css/web-font.css">
 
 </head>
 
@@ -39,7 +40,7 @@
 
                 <!-- Page Title -->
                 <div class="col-md-8">
-                    <h1 class="title">Blog - Posts List</h1>
+                    <h1 class="title">Meet Posts List</h1>
                     <div class="subtitle">There are many variations of passages </div>
                 </div>
                 <!-- /Page Title -->
@@ -83,7 +84,6 @@
                             <div class="project-item">
                                 
                                     <div class="gallery-image">
-
                                         <img v-bind:src="p.meetphoto">
                                     </div>
 
@@ -159,8 +159,7 @@
             el: '#app',
             data: {
                 posts: [],
-                category: [],
-                userid:''
+                category: []
             },
             created: function () {
                 axios.get('/category')
@@ -202,15 +201,6 @@
                         console.log(err);
                     });
 
-                },
-                search: function (value) {
-                    axios.get('/meetpost/search?categoryid=' + value)
-                        .then(function (res) {
-                            this.posts = res.data;
-                        }.bind(this))
-                        .catch(function (err) {
-                            console.log(err);
-                        });
                 }
             }
         });
