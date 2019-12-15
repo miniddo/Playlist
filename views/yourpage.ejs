@@ -41,7 +41,7 @@
 
                 <!-- Page Title -->
                 <div class="col-md-8">
-                    <h1 class="title">Your page</h1>
+                    <h1 class="title">Other Users page</h1>
                     <!-- <div class="subtitle">타인 정보</div> -->
                 </div>
                 <!-- /Page Title -->
@@ -169,7 +169,7 @@
                             return false;
                         }
                         if (res.data.code == 200) {
-                            this.userid = res.data.result;
+                            this.userid = res.data.result.id;
                         }
                         
                     }.bind(this))
@@ -186,7 +186,6 @@
 
                 axios.get('/yourpage/' + id)
                     .then(function (res) {
-                        console.log(res.data);
                         this.user = res.data;
                     }.bind(this))
                     .catch(function (err) {

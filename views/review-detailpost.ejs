@@ -4,7 +4,7 @@
 <head>
 
     <!-- Page title -->
-    <title>Playlist</title>
+    <title>PLAYLIST</title>
 
     <!-- Meta -->
     <meta charset="utf-8">
@@ -62,11 +62,11 @@
                     <!-- Widget: Categories -->
                     <div class="widget">
 
-                        <div class="title">Categories</div>
+                        <div class="title"><a href="/review">Categories</a></div>
                         <ul class="sidebar-menu">
-                            <li v-for="c in category"><a>{{c.categoryname}}</a></li>
-                        </ul>
-
+                            <li v-for="c in category"><a
+                                    v-bind:href="'/category/recategorylist?id='+c.id">{{c.categoryname}}</a></li>
+                        </ul>   
                     </div>
                     <!-- /Widget: Categories -->
 
@@ -90,7 +90,7 @@
                                 <!--class="image"-->
                                 <div>
                                     <!--class="gallery-image"-->
-                                    <img v-bind:src="'/' + reviews.introphoto" width="300px" height="300px">
+                                    <img v-bind:src="'/' + reviews.introphoto" width="845px" height="530px">
                                 </div>
                             </div>
                             <!-- /Post Image -->
@@ -102,7 +102,7 @@
                                 <ul class="list-inline meta">
                                     <li><i class="icon fa fa-calendar"></i> {{reviews.createdAt}}</li>
                                     <li><i class="icon fa fa-user"></i> by <a
-                                            v-bind:href="'/yourpage?user='+reviews.user.id">{{reviews.user.useremail}}</a>
+                                            v-bind:href="'/yourpage?user='+reviews.user.id">{{reviews.user.username}}</a>
                                     </li>
                                 </ul>
                                 <!-- /Post Metadata -->
@@ -211,7 +211,6 @@
 
                 axios.get('/review/detail/' + id)
                     .then(function (res) {
-
                         this.reviews = res.data;
                     }.bind(this))
                     .catch(function (err) {
@@ -232,8 +231,13 @@
                     const buttonValue = e.target.value;
                     var del = confirm("삭제하시겠습니까?")
                     if (del) {
-                        axios.delete('/review/delete/' + buttonValue);
-                        location.href = "/review";
+                        axios.delete('/review/delete/' + buttonValue)
+                        .then(function(res) {
+                            location.href = "/review";
+                        }.bind(this))
+                        .catch(function(err) {
+                            console.log(err);
+                        });                        
                     }
                 },
                 
