@@ -18,12 +18,20 @@
                         <!-- /Company Information -->
 
                         <!-- Search Form -->
-                        <div class="col-md-3">
+                        <!-- <div class="col-md-3">
                             <div class="search-form">
-                                <input type="email" class="form-control" placeholder="Search..." required>
-                                <button class="btn btn-search"><i class="fa fa-fw fa-search"></i></button>
+                                <input v-model="search.what"  ref="what" type="text" class="form-control" placeholder="Search..." required>
+                                <button v-on:click="searchMove" class="btn btn-search"><i class="fa fa-fw fa-search"></i></button>
+                            </div>
+                        </div> -->
+                        
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <input v-model="search.what"  ref="what" type="text" class="form-control" placeholder="Search..." required>
+                                <button v-on:click="searchMove" class="btn btn-search"><i class="fa fa-fw fa-search"></i></button>
                             </div>
                         </div>
+                        
                         <!-- /Search Form -->
 
                         <!-- User Cabinet Links -->
@@ -125,7 +133,8 @@
         el: '#headvue',
         data: {
             userid:'',
-            user: {}
+            user: {},
+            search: {what: ''}
         },
         created: function () {
 
@@ -145,6 +154,26 @@
                     .catch(function (err) {
                         console.log(err);
                 });
+        },
+        methods: {
+            searchMove: function () {
+
+                if (this.$refs.what.value == "") {
+                    alert("검색어를 입력해주세요.");
+                    this.$refs.what.focus();
+                    return false;
+                }
+
+                const suttonValue = e.target.value;
+
+                axios.post('/search/' + suttonValue, this.search)
+                    .then(function (res) {
+                        location.href = "/search/" + sbuttonValue;
+                    }.bind(this))
+                    .catch(function (err) {
+                        console.log(err)
+                    });     
+            },
         }
     });
 </script>
