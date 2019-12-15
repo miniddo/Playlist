@@ -3,7 +3,9 @@ var router = express.Router();
 var MeetPost = require('../models/index.js').MeetPost;
 var Category = require('../models/index.js').Category;
 var User = require('../models/index.js').User;
-var Participants = require('../models/index.js').Participants;
+var Comment = require('../models/index').Comment;
+var Favorite = require('../models/index').Favorite;
+var Participants = require('../models/index').Participants;
 const { verifyToken } = require('./middlewares');
 
 // 글 작성 페이지 렌더링
@@ -54,6 +56,35 @@ router.get('/list', async (req, res) => {
 
 });
 
+// 조회수 라우터
+router.get('/counts/:id', async (req, res) => {
+
+  var counts = await MeetPost.findOne({
+    attributes: ['count'],
+    where: { id: req.params.id }
+  });
+
+  var countup = counts.count + 1;
+  try {
+    await MeetPost.update(
+      {
+        count: countup
+      },
+      {
+        where: { id: req.params.id }
+      }
+    );
+
+    var updatecount = await MeetPost.findOne({
+      attributes: ['count'],
+      where: { id: req.params.id }
+    });
+    return res.json(updatecount.count);
+  } catch (err) {
+    console.log(err);
+  }
+});
+
 // 상세글 페이지 렌더링
 router.get('/detailpost', function (req, res, next) {
   res.render('detailpost');
@@ -95,7 +126,7 @@ router.get('/modify/:id', async (req, res) => {
 });
 
 // 글 수정 라우터
-router.patch('/modify/:id', verifyToken, async (req, res) => {
+router.post('/modify/:id', verifyToken, async (req, res) => {
   try {
     var modifypost = await MeetPost.update(
       {
@@ -118,36 +149,16 @@ router.patch('/modify/:id', verifyToken, async (req, res) => {
 });
 
 // 글 삭제
-router.delete('/delete/:id', function (req, res, next) {
-  MeetPost.destroy({ where: { id: req.params.id } })
-    .then((result) => {
-      res.json(result);
-    })
-    .catch((err) => {
-      console.error(err);
-      next(err);
-    });
-});
-
-// 참여하기
-router.post('/participate/:meetpostId', function (req, res, next) {
-
-  var meetpostId = req.params.meetpostId;
-
-  Participants.create({
-    meetpostId: meetpostId,
-    userId: req.body.userId,
-    state: 1,
-    where: { id: req.params.id }
-  })
-
-    .then((result) => {
-      res.json(result);
-    })
-    .catch((err) => {
-      console.error(err);
-      next(err);
-    });
+router.delete('/delete/:id', async (req, res) =>  {
+  try{
+    var deletecomment = await Comment.destroy({ where: { meetpostId: req.params.id }});
+    var deletefavorite = await Favorite.destroy({ where: { meetpostId: req.params.id }});
+    var deleteparticipant = await Participants.destroy({ where: { meetpostId: req.params.id }});
+    var deletepost = await MeetPost.destroy({ where: { id: req.params.id } });
+    return res.json(deletepost);
+  } catch(err) {
+    console.log(err);
+  }
 });
 
 module.exports = router;

@@ -6,25 +6,38 @@ var User = require('../models/index.js').User;
 const { verifyToken } = require('./middlewares');
 var nodemailer = require('nodemailer');
 
-// 상세페이지 렌더링할 때 현재 로그인 되어있는 사용자의 참여하기 상태를 전달해주는 라우터
-router.get('/:meetpostId', verifyToken, function (req, res, next) {
+// 참여하기 누른 목록 라우터
+router.get('/participantlist', verifyToken, async (req, res) => {
   
-  var userid = req.decoded.id;
-
-  Participants.findOne({
-    attributes: ['state'],
-    where: {
-      userId: userid,
-      meetpostId: req.params.meetpostId
-    }
-  })
-    .then((fav) => {
-      res.json(fav);
-    }).catch((err) => {
-      console.error(err);
-      next(err);
+  try {
+    const participantlist = await Participants.findAll({
+      attributes: ['meetpostId'],
+      where: { userId: req.decoded.id },
+      include:[{model: MeetPost}]
     });
+
+    return res.json(participantlist);
+  } catch (err) {
+    console.log(err);
+  }
+});
+
+// 상세페이지 렌더링할 때 현재 로그인 되어있는 사용자의 참여하기 상태를 전달해주는 라우터
+router.get('/:meetpostId', verifyToken, async (req, res) => {
   
+  try {
+    var userid = req.decoded.id;
+    var participantstate = await Participants.findOne({
+      attributes: ['state'],
+      where: {
+        userId: userid,
+        meetpostId: req.params.meetpostId
+      }
+    });
+    return res.json(participantstate);
+  } catch(err) {
+    console.log(err);
+  }
 });
 
 // 참여하기 버튼을 누르면 실행되는 라우터.
@@ -94,16 +107,16 @@ router.post('/:meetpostId', async (req, res, next) => {
             var transporter = nodemailer.createTransport({
               service:'gmail',
               auth: {
-                  user : 'miniddo96@gmail.com',
-                  pass : 'kds97523!'
+                  user : 'playlist1217@gmail.com',
+                  pass : 'ppk1217!'
               }
             });
           
             var mailOption = {
-                from : 'miniddo96@gmail.com',
+                from : 'playlist1217@gmail.com',
                 to : writeemail.useremail,
                 subject : '[Playlist] 참여 취소 안내',
-                text : '[Playlist]\n\n [' + partiemail.useremail + '] 님이 [' + postname.title + '] 참여를 취소하였습니다.'
+                text : '[Playlist]\n\n 안녕하세요. 취미 공유 플랫폼 Playlist 입니다.\n [' + partiemail.useremail + '] 님이 [' + postname.title + '] 참여를 취소하였습니다.'
             };
             
             transporter.sendMail(mailOption, function(err, info) {
@@ -178,16 +191,16 @@ router.post('/:meetpostId', async (req, res, next) => {
             var transporter = nodemailer.createTransport({
               service:'gmail',
               auth: {
-                  user : 'miniddo96@gmail.com',
-                  pass : 'kds97523!'
+                  user : 'playlist1217@gmail.com',
+                  pass : 'ppk1217!'
               }
             });
           
             var mailOption = {
-                from : 'miniddo96@gmail.com',
+                from : 'playlist1217@gmail.com',
                 to : writeemail.useremail,
                 subject : '[Playlist] 참여 안내',
-                text : '[Playlist]\n\n [' + partiemail.useremail + '] 님이 [' + postname.title + ']에 참여하였습니다.'
+                text : '[Playlist]\n\n 안녕하세요. 취미 공유 플랫폼 Playlist 입니다.\n [' + partiemail.useremail + '] 님이 [' + postname.title + ']에 참여하였습니다.'
             };
             
             transporter.sendMail(mailOption, function(err, info) {
@@ -211,19 +224,5 @@ router.post('/:meetpostId', async (req, res, next) => {
   }
 
 });
-
-router.get('/participantlist', verifyToken, function (req, res, next){
-  Participants.findOne({
-    attributes:['meetpostId'],
-    where: {userId: req.decoded.id}
-  })
-  .then((posts) => {
-    res.json(posts);
-  }).catch((err) => {
-    console.error(err);
-    next(err);
-  });
-});
-
 
 module.exports = router;  
