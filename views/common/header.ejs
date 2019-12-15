@@ -9,39 +9,23 @@
                     <div class="row">
 
                         <!-- Company Information -->
-                        <div class="col-md-7 contact-information">
+                        <div class="col-md-9 contact-information">
                             <ul class="list-inline">
-                                <li><i class="icon fa fa-fw fa-phone"></i> +1 (201) 987-1185</li>
-                                <li><i class="icon fa fa-fw fa-envelope-o"></i> clients@example.com</li>
+                                <!-- <li><i class="icon fa fa-fw fa-phone"></i> +1 (201) 987-1185</li> -->
+                                <li><i class="icon fa fa-fw fa-envelope-o"></i> playlist1217@gmail.com</li>
                             </ul>
                         </div>
                         <!-- /Company Information -->
 
-                        <!-- Search Form -->
-                        <!-- <div class="col-md-3">
-                            <div class="search-form">
-                                <input v-model="search.what"  ref="what" type="text" class="form-control" placeholder="Search..." required>
-                                <button v-on:click="searchMove" class="btn btn-search"><i class="fa fa-fw fa-search"></i></button>
-                            </div>
-                        </div> -->
-                        
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <input v-model="search.what"  ref="what" type="text" class="form-control" placeholder="Search..." required>
-                                <button v-on:click="searchMove" class="btn btn-search"><i class="fa fa-fw fa-search"></i></button>
-                            </div>
-                        </div>
-                        
-                        <!-- /Search Form -->
-
                         <!-- User Cabinet Links -->
-                        <div class="col-md-2 user-cabinet-links">
-                            <ul class="list-inline" v-if="!userid" >  <!--v-if="!userid"-->
+                        <div class="col-md-3 user-cabinet-links">
+                            <ul class="list-inline" v-if="!userid">
                                 <li><a href="#" data-toggle="modal" data-target="#sign-in"><i class="icon fa fa-fw fa-sign-in"></i> Sign in</a></li>
                                 <li><a href="#" data-toggle="modal" data-target="#sign-up"><i class="icon fa fa-fw fa-edit"></i> Sign up</a></li>
                             </ul>
-                            <ul class="list-inline" v-else="userid" > 
+                            <ul class="list-inline" v-else> 
                                 <li><a href="/mypage" data-toggle="modal"><i class="icon fa fa-fw fa-sign-in"></i>　{{user.username}}<b>　님</b></a></li>
+                                <li><button class="btn btn-mariner btn-sm" v-on:click="logout">logout</button></li>
                             </ul>
                         </div>
                         <!-- /User Cabinet Links -->
@@ -84,10 +68,10 @@
                                 <!-- Brand -->
                                 <a href="/" class="brand">
                                     <div class="logo-big">
-                                        <img src="/images/playlistlogo.png" alt="">
+                                        <img src="/images/logo2.png" alt="">
                                     </div>
                                     <div class="logo-small">
-                                        <img src="/images/logo-small.png" alt="">
+                                        <img src="/images/logo2.png" alt="">
                                     </div>
                                 </a>
                                 <!-- /Brand -->
@@ -102,7 +86,7 @@
                                         <a href="/">Home</a>
                                     </li>
                                     <li>
-                                        <a href="/meetpost">Category</a> 
+                                        <a href="/meetpost">Meeting</a> 
                                     </li>
                                     <li>
                                         <a href="/review">Review</a>
@@ -133,8 +117,7 @@
         el: '#headvue',
         data: {
             userid:'',
-            user: {},
-            search: {what: ''}
+            user: {}
         },
         created: function () {
 
@@ -148,7 +131,6 @@
 
                 axios.get('/user/profile', { headers: { authorization: localStorage.getItem('token') } }).then(function (res) {
                     this.img = res.data.result.photofullroute;
-                    console.log(res.data.result.photofullroute)
                     this.user = res.data.result;
                     }.bind(this))
                     .catch(function (err) {
@@ -156,24 +138,10 @@
                 });
         },
         methods: {
-            searchMove: function () {
-
-                if (this.$refs.what.value == "") {
-                    alert("검색어를 입력해주세요.");
-                    this.$refs.what.focus();
-                    return false;
-                }
-
-                const suttonValue = e.target.value;
-
-                axios.post('/search/' + suttonValue, this.search)
-                    .then(function (res) {
-                        location.href = "/search/" + sbuttonValue;
-                    }.bind(this))
-                    .catch(function (err) {
-                        console.log(err)
-                    });     
-            },
+            logout: function() {
+                localStorage.removeItem('token');
+                location.href = '/';
+            }
         }
     });
 </script>
