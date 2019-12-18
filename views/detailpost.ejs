@@ -4,7 +4,7 @@
 <head>
 
     <!-- Page title -->
-    <title>Playlist</title>
+    <title>PLAYLIST</title>
 
     <!-- Meta -->
     <meta charset="utf-8">
@@ -102,7 +102,7 @@
 
                                 <!-- Post Metadata -->
                                 <ul class="list-inline meta">
-                                    <li><i class="icon fa fa-calendar"></i> {{posts.createdAt}}</li>
+                                    <li><i class="icon fa fa-calendar"></i> {{getTime}}</li>
                                     <li><i class="icon fa fa-user"></i> by <a
                                             v-bind:href="'/yourpage?user='+posts.user.id">{{posts.user.username}}</a>
                                     </li>
@@ -167,7 +167,7 @@
                                             <h4 class="author"><a
                                                     v-bind:href="'/yourpage?user='+posts.user.id">{{comment.user.username}}</a>
                                             </h4>
-                                            <span class="date">{{comment.createdAt}}</span>
+                                            <span class="date">{{getcommentTime}}</span>
                                             <p class="text">
                                                 {{comment.comment}}
                                             </p>
@@ -470,6 +470,16 @@
                         .catch(function (err) {
                             console.log(err);
                         });
+                }
+            },
+            computed: {
+                getTime: function() {
+                    var createdDate = new Date(this.posts.createdAt);
+                    return createdDate.toLocaleString('ko-KR', { timeZone: 'Asia/Seoul' });
+                },
+                getcommentTime: function() {
+                    var createdAt = new Date(this.comments.createdAt);
+                    return createdAt.toLocaleString('ko-KR', { timeZone: 'Asia/Seoul' });
                 }
             }
         });
